@@ -1,6 +1,6 @@
 # 本体相机视频流
 
-[返回首页](../index.md) | [设备操作、遥控器与 App 使用说明](./05-设备操作、遥控器与App使用说明.md) | [SDK 开发与运行指南](./08-SDK开发与运行指南.md)
+[返回首页](../index.md) | [设备操作、遥控器与 App 使用说明](./05-device-controller-and-app-guide.md) | [SDK 开发与运行指南](./08-sdk-development-guide.md)
 
 ## 视频流信息
 

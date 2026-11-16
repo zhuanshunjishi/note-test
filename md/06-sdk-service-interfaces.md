@@ -1,6 +1,6 @@
 # SDK 软件服务接口
 
-[返回首页](../index.md) | [硬件、软件与结构架构](./03-硬件、软件与结构架构.md) | [SDK 开发与运行指南](./08-SDK开发与运行指南.md)
+[返回首页](../index.md) | [硬件、软件与结构架构](./03-system-architecture.md) | [SDK 开发与运行指南](./08-sdk-development-guide.md)
 
 ## 接口说明
 
@@ -16,11 +16,11 @@ SDK 源码、版本说明和示例程序见 GitHub：[zsibot/genisom_l1_sdk](htt
 
 | 接口文档 | 主要内容 | 主要 SDK 入口 |
 | --- | --- | --- |
-| [控制指令接口](./06-01-控制指令接口.md) | 发送离散动作命令和连续运动输入，申请 SDK 控制权 | `SetCmd()`、`SetRemote()`、`ZsibotExecutor` |
-| [传感器实时上报接口](./06-02-传感器实时上报接口.md) | 读取电量、姿态、速度、里程计、电机和关节状态 | `GetPower()`、`GetQuaternion()`、`GetLeg*Joint()` |
-| [心跳检测接口](./06-03-心跳检测接口.md) | 维护通信心跳并判断 SDK 与机器人是否连接 | `IsConnected()` |
-| [WiFi 热点配置接口](./06-04-WiFi热点配置接口.md) | 修改机器人 WiFi 名称和密码，读取异步配置结果 | `SetWifi()`、`GetWifiResutlf()`、`IsRecvWifiResult()` |
-| [故障信息查询接口](./06-05-故障信息查询接口.md) | 读取机器人最近一次上报的故障列表 | `GetFaultInfo()` |
+| [控制指令接口](./06-01-control-commands.md) | 发送离散动作命令和连续运动输入，申请 SDK 控制权 | `SetCmd()`、`SetRemote()`、`ZsibotExecutor` |
+| [传感器实时上报接口](./06-02-real-time-sensor-data.md) | 读取电量、姿态、速度、里程计、电机和关节状态 | `GetPower()`、`GetQuaternion()`、`GetLeg*Joint()` |
+| [心跳检测接口](./06-03-heartbeat.md) | 维护通信心跳并判断 SDK 与机器人是否连接 | `IsConnected()` |
+| [WiFi 热点配置接口](./06-04-wifi-hotspot-configuration.md) | 修改机器人 WiFi 名称和密码，读取异步配置结果 | `SetWifi()`、`GetWifiResutlf()`、`IsRecvWifiResult()` |
+| [故障信息查询接口](./06-05-fault-information.md) | 读取机器人最近一次上报的故障列表 | `GetFaultInfo()` |
 
 ## 默认网络配置
 
@@ -66,10 +66,10 @@ ZsibotExecutor
 ## 推荐调用顺序
 
 1. 创建 `ZsibotExecutor`。
-2. 等待 [心跳检测接口](./06-03-心跳检测接口.md)中的 `IsConnected()` 返回 `true`。
-3. 调用 [控制指令接口](./06-01-控制指令接口.md)中的 `CMD_SDK_CONTROL_RIGHT` 请求控制权。
-4. 读取 [传感器实时上报接口](./06-02-传感器实时上报接口.md)中的功能模式，确认 `GetFunctionMode() == FunctionMode::FM_SDK`；控制模式只用于判断站立、趴下、移动等状态。
-5. 读取 [故障信息查询接口](./06-05-故障信息查询接口.md)确认当前没有需要处理的故障。
+2. 等待 [心跳检测接口](./06-03-heartbeat.md)中的 `IsConnected()` 返回 `true`。
+3. 调用 [控制指令接口](./06-01-control-commands.md)中的 `CMD_SDK_CONTROL_RIGHT` 请求控制权。
+4. 读取 [传感器实时上报接口](./06-02-real-time-sensor-data.md)中的功能模式，确认 `GetFunctionMode() == FunctionMode::FM_SDK`；控制模式只用于判断站立、趴下、移动等状态。
+5. 读取 [故障信息查询接口](./06-05-fault-information.md)确认当前没有需要处理的故障。
 6. 根据需要发送 `SetCmd()` 或 `SetRemote()`。
 7. 运行期间持续读取传感器、连接状态和故障信息。
 8. 断网、心跳超时、故障等级升高或程序异常时，停止发送运动指令并进入安全状态。

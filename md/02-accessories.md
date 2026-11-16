@@ -1,6 +1,6 @@
 # 配件列表
 
-[返回首页](../index.md) | [产品规格对比](./01-产品规格对比.md) | [设备操作、遥控器与 App 使用说明](./05-设备操作、遥控器与App使用说明.md)
+[返回首页](../index.md) | [产品规格对比](./01-product-specifications.md) | [设备操作、遥控器与 App 使用说明](./05-device-controller-and-app-guide.md)
 
 <style>
   table {
@@ -128,7 +128,7 @@
 
 ### 使用建议
 
-连接、控制和 App 操作流程请查看[设备操作、遥控器与 App 使用说明](./05-设备操作、遥控器与App使用说明.md)。
+连接、控制和 App 操作流程请查看[设备操作、遥控器与 App 使用说明](./05-device-controller-and-app-guide.md)。
 
 <a id="handheld-controller"></a>
 

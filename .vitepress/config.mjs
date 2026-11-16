@@ -27,39 +27,39 @@ export default defineConfig({
       {
         text: '产品与配件',
         items: [
-          { text: '产品规格对比', link: '/md/01-产品规格对比' },
-          { text: '配件列表', link: '/md/02-配件列表' },
+          { text: '产品规格对比', link: '/md/01-product-specifications' },
+          { text: '配件列表', link: '/md/02-accessories' },
         ],
       },
       {
         text: '上手与操作',
         items: [
-          { text: '设备操作、遥控器与 App', link: '/md/05-设备操作、遥控器与App使用说明' },
+          { text: '设备操作、遥控器与 App', link: '/md/05-device-controller-and-app-guide' },
         ],
       },
       {
         text: 'SDK 开发',
         items: [
-          { text: '硬件、软件与结构架构', link: '/md/03-硬件、软件与结构架构' },
-          { text: 'SDK 开发与运行指南', link: '/md/08-SDK开发与运行指南' },
-          { text: '官方示例使用说明', link: '/md/09-官方示例使用说明' },
-          { text: '本体相机视频流', link: '/md/07-本体相机视频流' },
+          { text: '硬件、软件与结构架构', link: '/md/03-system-architecture' },
+          { text: 'SDK 开发与运行指南', link: '/md/08-sdk-development-guide' },
+          { text: '官方示例使用说明', link: '/md/09-official-examples' },
+          { text: '本体相机视频流', link: '/md/07-onboard-camera-stream' },
         ],
       },
       {
         text: '接口参考',
         items: [
-          { text: '二次开发硬件接口', link: '/md/04-二次开发硬件接口说明' },
+          { text: '二次开发硬件接口', link: '/md/04-hardware-interfaces' },
           {
             text: 'SDK 软件服务接口',
-            link: '/md/06-SDK软件服务接口',
+            link: '/md/06-sdk-service-interfaces',
             collapsed: false,
             items: [
-              { text: '控制指令', link: '/md/06-01-控制指令接口' },
-              { text: '传感器实时上报', link: '/md/06-02-传感器实时上报接口' },
-              { text: '心跳检测', link: '/md/06-03-心跳检测接口' },
-              { text: 'WiFi 热点配置', link: '/md/06-04-WiFi热点配置接口' },
-              { text: '故障信息查询', link: '/md/06-05-故障信息查询接口' },
+              { text: '控制指令', link: '/md/06-01-control-commands' },
+              { text: '传感器实时上报', link: '/md/06-02-real-time-sensor-data' },
+              { text: '心跳检测', link: '/md/06-03-heartbeat' },
+              { text: 'WiFi 热点配置', link: '/md/06-04-wifi-hotspot-configuration' },
+              { text: '故障信息查询', link: '/md/06-05-fault-information' },
             ],
           },
         ],

@@ -1,12 +1,12 @@
 # 二次开发硬件接口说明
 
-[返回首页](../index.md) | [硬件、软件与结构架构](./03-硬件、软件与结构架构.md) | [SDK 软件服务接口](./06-SDK软件服务接口.md)
+[返回首页](../index.md) | [硬件、软件与结构架构](./03-system-architecture.md) | [SDK 软件服务接口](./06-sdk-service-interfaces.md)
 
 ## 适用范围
 
 本页说明机器人本体用于二次开发的尺寸、负载设计参考、外观模型、外部接口及已公开的供电参数。
 
-软件通信和控制程序请查看[硬件、软件与结构架构](./03-硬件、软件与结构架构.md)及[SDK 软件服务接口](./06-SDK软件服务接口.md)。
+软件通信和控制程序请查看[硬件、软件与结构架构](./03-system-architecture.md)及[SDK 软件服务接口](./06-sdk-service-interfaces.md)。
 
 <a id="dimensions"></a>
 
@@ -20,8 +20,8 @@
 
 | 资料 | 用途 | 下载 |
 | --- | --- | --- |
-| ZSL-1 负载能力设计参考 | 查看不同负载质心位置对应的负载参考值、坐标定义和实验条件 | [下载 PDF](../assets/downloads/智身四足机器人ZSL-1负载能力设计参考.pdf) |
-| ZSL-1 外观模型 | 用于外观尺寸查看、上装布局和空间配合参考 | <a href="../assets/downloads/智身四足机器人ZSL-1外观模型.stp" download>下载 STP 模型（约 31 MB）</a> |
+| ZSL-1 负载能力设计参考 | 查看不同负载质心位置对应的负载参考值、坐标定义和实验条件 | [下载 PDF](../assets/downloads/zsl-1-payload-design-reference.pdf) |
+| ZSL-1 外观模型 | 用于外观尺寸查看、上装布局和空间配合参考 | <a href="../assets/downloads/zsl-1-exterior-model.stp" download>下载 STP 模型（约 31 MB）</a> |
 
 负载参考 PDF 中的表格数据为仿真实验结果，条件为平坦路面、机器人以 2 m/s 速度奔跑。实际应用需结合质心位置、路面和运动工况调整；上下坡、上下楼梯时应降低负载。具体坐标定义和适用条件请查看 PDF。
 
