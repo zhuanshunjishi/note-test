@@ -27,7 +27,7 @@ jobs:
           npm run docs:build
           npm run docs:m1:build
           mkdir -p _site/l1 _site/m1
-          cp pages/index.html _site/index.html
+          cp -R pages/. _site/
           cp -R l1/.vitepress/dist/. _site/l1/
           cp -R m1/.vitepress/dist/. _site/m1/
       - uses: actions/upload-pages-artifact@v3

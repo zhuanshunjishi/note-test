@@ -3,25 +3,245 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>产品开发文档</title>
+    <meta name="description" content="钢镚 L1 与铜锤 M1 的设备使用、SDK 开发和接口参考。">
+    <title>智身科技开发者文档</title>
     <style>
-      body {
-        margin: 4rem auto;
-        max-width: 38rem;
-        padding: 0 1.5rem;
-        font: 1rem/1.6 system-ui, sans-serif;
-        color-scheme: light dark;
+      :root {
+        color-scheme: light;
+        font-family: "Geist", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+        color: #20242b;
+        background: #f7f8fa;
+        --muted: #555d6b;
+        --line: #dce1e8;
+        --accent: #a3342a;
       }
-      li + li { margin-top: 0.75rem; }
+
+      * { box-sizing: border-box; }
+      body { margin: 0; }
+      a { color: inherit; text-decoration: none; }
+      :focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
+
+      .shell {
+        width: min(100% - 64px, 1280px);
+        margin-inline: auto;
+      }
+
+      .site-header {
+        background: #fff;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .topbar {
+        min-height: 68px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        font-weight: 700;
+      }
+
+      .brand span {
+        color: var(--accent);
+        white-space: nowrap;
+      }
+
+      .brand strong {
+        border-left: 1px solid var(--line);
+        padding-left: 14px;
+      }
+
+      nav { display: flex; gap: clamp(16px, 3vw, 40px); }
+      nav a { padding-block: 10px; font-size: 0.875rem; white-space: nowrap; }
+      nav a:hover { color: var(--accent); }
+
+      main { padding-block: 32px 64px; }
+
+      .hero {
+        display: grid;
+        grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 24px;
+        background: linear-gradient(145deg, #fff, #eef1f5);
+      }
+
+      .hero-copy {
+        align-self: center;
+        padding: clamp(24px, 4.4vw, 64px);
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(2rem, 3.6vw, 3.5rem);
+        line-height: 1.18;
+        letter-spacing: -0.045em;
+      }
+
+      .hero p {
+        margin: 18px 0 0;
+        color: var(--muted);
+        line-height: 1.7;
+      }
+
+      .hero img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .catalog { margin-top: 38px; }
+      .catalog h2 { margin: 0 0 16px; font-size: 1.375rem; }
+
+      .products {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 20px;
+      }
+
+      .product {
+        display: grid;
+        grid-template-columns: minmax(0, 0.92fr) minmax(0, 1fr);
+        min-height: 226px;
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        overflow: hidden;
+        transition: border-color 160ms ease, box-shadow 160ms ease;
+      }
+
+      .product:hover,
+      .product:focus-visible {
+        border-color: #bd766e;
+        box-shadow: 0 8px 24px #252d4410;
+      }
+
+      .product-image {
+        display: grid;
+        place-items: center;
+        padding: 20px;
+        background: radial-gradient(ellipse at 50% 38%, #fafcff, #e6ebf2);
+      }
+
+      .product-m1 .product-image {
+        background: radial-gradient(ellipse at 50% 38%, #fffdf9, #ede7df);
+      }
+
+      .product img {
+        display: block;
+        width: 100%;
+        height: 170px;
+        object-fit: contain;
+        filter: drop-shadow(0 12px 10px #25304426);
+        transition: transform 180ms ease;
+      }
+
+      .product:hover img { transform: translateY(-3px); }
+
+      .product-copy {
+        align-self: center;
+        padding: clamp(16px, 2vw, 30px);
+      }
+
+      .product h3 {
+        margin: 0;
+        font-size: clamp(1.35rem, 2.2vw, 2rem);
+        letter-spacing: -0.04em;
+      }
+
+      .product p {
+        margin: 8px 0 18px;
+        color: var(--muted);
+        font-size: 0.875rem;
+        line-height: 1.65;
+      }
+
+      .product-action {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--accent);
+        font-size: 0.875rem;
+        font-weight: 700;
+      }
+
+      @media (max-width: 900px) {
+        .product { grid-template-columns: 1fr; }
+        .product-image { padding: 18px; }
+        .product-copy { padding: 20px; }
+      }
+
+      @media (max-width: 640px) {
+        .shell { width: calc(100% - 32px); }
+        .brand strong { display: none; }
+        .topbar { min-height: 56px; }
+        main { padding-block: 20px 40px; }
+        .hero { grid-template-columns: 1fr; border-radius: 18px; }
+        .hero img { height: auto; }
+        .hero p { margin-top: 12px; }
+        .catalog { margin-top: 26px; }
+        .products { gap: 12px; }
+        .product { border-radius: 16px; }
+        .product-image { padding: 12px; }
+        .product img { height: clamp(88px, 26vw, 156px); }
+        .product-copy { padding: 14px; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .product, .product img { transition: none; }
+        .product:hover img { transform: none; }
+      }
     </style>
   </head>
   <body>
-    <main>
-      <h1>产品开发文档</h1>
-      <ul>
-        <li><a href="./l1/">钢镚 L1 SDK 开发文档</a></li>
-        <li><a href="./m1/">铜锤 M1 开发者文档</a></li>
-      </ul>
+    <header class="site-header">
+      <div class="shell topbar">
+        <div class="brand"><span>智身科技</span><strong>开发者文档</strong></div>
+        <nav aria-label="产品文档">
+          <a href="./l1/">L1 文档</a>
+          <a href="./m1/">M1 文档</a>
+        </nav>
+      </div>
+    </header>
+    <main class="shell">
+      <section class="hero" aria-labelledby="page-title">
+        <div class="hero-copy">
+          <h1 id="page-title">产品开发文档</h1>
+          <p>查看钢镚 L1 和铜锤 M1 的设备使用指南、SDK 开发流程与接口参考。</p>
+        </div>
+        <img src="./assets/family.jpg" width="1800" height="1012" alt="智身科技机器人产品全家福" fetchpriority="high">
+      </section>
+      <section class="catalog" aria-labelledby="catalog-title">
+        <h2 id="catalog-title">选择产品</h2>
+        <div class="products">
+          <a class="product" href="./l1/" aria-labelledby="l1-title l1-action">
+            <div class="product-image">
+              <img src="./assets/l1.png" width="800" height="693" alt="" decoding="async">
+            </div>
+            <div class="product-copy">
+              <h3 id="l1-title">钢镚 L1</h3>
+              <p>四足机器人系列</p>
+              <span class="product-action" id="l1-action">查看文档 <span aria-hidden="true">→</span></span>
+            </div>
+          </a>
+          <a class="product product-m1" href="./m1/" aria-labelledby="m1-title m1-action">
+            <div class="product-image">
+              <img src="./assets/m1.png" width="800" height="593" alt="" decoding="async">
+            </div>
+            <div class="product-copy">
+              <h3 id="m1-title">铜锤 M1</h3>
+              <p>轮足机器人系列</p>
+              <span class="product-action" id="m1-action">查看文档 <span aria-hidden="true">→</span></span>
+            </div>
+          </a>
+        </div>
+      </section>
     </main>
   </body>
 </html>
