@@ -1,0 +1,33 @@
+.vp-doc .specification-table {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.vp-doc .specification-table table {
+  display: table;
+  width: 100%;
+  min-width: 860px;
+  table-layout: fixed;
+  font-size: 14px;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.vp-doc .model-table table {
+  min-width: 420px;
+}
+
+.vp-doc .specification-table:focus-visible {
+  outline: 2px solid var(--vp-c-brand-1);
+  outline-offset: 2px;
+}
+
+.vp-doc .specification-table .specification-label,
+.vp-doc .specification-table .specification-section {
+  text-align: left;
+}
+
+.vp-doc .specification-table .specification-section {
+  background-color: var(--vp-c-default-soft);
+  font-size: 1.05em;
+}
