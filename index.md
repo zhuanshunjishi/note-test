@@ -1,5 +1,7 @@
 # 钢镚 L1 SDK 开发文档
 
+![2025 年酒泉发射中心产品照片](./assets/images/2025-jiuquan-launch-center-product-03.jpg)
+
 ## 关于本指南
 
 本指南适用于钢镚 L1、L1-W、L1 EDU、L1-W EDU 系列产品，内容涵盖产品规格、配件配置、设备操作、网络连接、系统架构、SDK 通信、硬件接口、SDK 构建、示例调试和本体相机视频流。
