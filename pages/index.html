@@ -49,26 +49,28 @@
       .brand-logos {
         display: flex;
         align-items: center;
-        gap: 12px;
       }
 
       .brand-logos img {
         display: block;
         width: auto;
-        height: 28px;
+        height: 32px;
       }
 
-      .brand-logos img:last-child {
-        height: 24px;
+      .brand-logos img + img {
+        margin-left: 12px;
+        padding-left: 12px;
+        border-left: 1px solid var(--line);
       }
 
       .brand strong {
-        border-left: 1px solid var(--line);
         padding-left: 14px;
+        font-size: 1.25rem;
+        white-space: nowrap;
       }
 
       nav { display: flex; gap: clamp(16px, 3vw, 40px); }
-      nav a { padding-block: 10px; font-size: 0.875rem; white-space: nowrap; }
+      nav a { padding-block: 10px; font-size: 0.875rem; letter-spacing: 1px; white-space: nowrap; }
       nav a:hover { color: var(--accent); }
 
       main { padding-block: 32px 64px; }
@@ -194,8 +196,10 @@
 
       @media (max-width: 640px) {
         .shell { width: calc(100% - 32px); }
-        .brand strong { display: none; }
-        .topbar { min-height: 56px; }
+        .topbar { flex-wrap: wrap; gap: 4px 16px; padding-block: 10px; }
+        .brand { gap: 10px; }
+        .brand-logos img { height: 26px; }
+        .brand strong { padding-left: 10px; font-size: 1.125rem; }
         main { padding-block: 20px 40px; }
         .hero { grid-template-columns: 1fr; border-radius: 18px; }
         .hero img { height: auto; }
@@ -225,8 +229,8 @@
           <strong>开发者文档</strong>
         </div>
         <nav aria-label="产品文档">
-          <a href="./l1/">L1 文档</a>
-          <a href="./m1/">M1 文档</a>
+          <a href="./l1/">智身钢镚L1文档</a>
+          <a href="./m1/">智身铜锤M1文档</a>
         </nav>
       </div>
     </header>
