@@ -4,7 +4,7 @@
 
 ## 示例来源与选择
 
-本章介绍官方 [genisom_L1_sdk 仓库](https://github.com/zsibot/genisom_L1_sdk/tree/main)中两个 HighLevel 示例的使用流程，按 2026 年 11 月 4 日核对的 `main` 分支编写。仓库后续更新时，应同时核对示例源码和构建配置。
+本章介绍官方 [genisom_L1_sdk 仓库](https://github.com/zsibot/genisom_L1_sdk/tree/main)中两个 HighLevel 示例的使用流程。
 
 | 示例 | 源码 | 通信身份 | 使用场景 |
 | --- | --- | --- | --- |
