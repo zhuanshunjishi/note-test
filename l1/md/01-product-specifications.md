@@ -385,7 +385,7 @@
 
 ## 尺寸、负载与模型资料
 
-进行上装或结构设计时，请查看[ZSL-1 尺寸与安装参考](./04-hardware-interfaces.md#dimensions)，以及[负载设计参考 PDF 和外观 STP 模型下载](./04-hardware-interfaces.md#payload-model-downloads)。
+进行上装或结构设计时，请查看[钢镚L1 尺寸与安装参考](./04-hardware-interfaces.md#dimensions)，以及[负载设计参考 PDF 和外观 STP 模型下载](./04-hardware-interfaces.md#payload-model-downloads)。
 
 ## 快速选型结论
 

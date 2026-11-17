@@ -4,8 +4,8 @@ import { defineConfig } from 'vitepress'
 
 export default defineConfig({
   lang: 'zh-CN',
-  title: '钢镚 L1 SDK 开发文档',
-  description: '钢镚 L1 系列的使用指南、SDK 开发说明和接口参考',
+  title: '钢镚L1 SDK 开发文档',
+  description: '钢镚L1 系列的使用指南、SDK 开发说明和接口参考',
   base: '/note-test/l1/',
   async buildEnd({ srcDir, outDir }) {
     // 保留直接下载和点击产品图时使用的原文件路径。

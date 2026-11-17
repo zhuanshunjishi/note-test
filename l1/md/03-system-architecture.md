@@ -4,7 +4,7 @@
 
 ## SDK 简介
 
-新版 ZSL-1 SDK 通过 `zsibot::ZsibotExecutor` 提供统一的 HighLevel C++ 接口。
+新版 钢镚L1 SDK 通过 `zsibot::ZsibotExecutor` 提供统一的 HighLevel C++ 接口。
 
 主要能力包括：
 
@@ -19,9 +19,9 @@
 
 ### 整机系统分层
 
-ZSL-1 整机由硬件设备、硬件控制与数据预处理、应用与系统接口、Robot Interface 和云端管理等部分组成。
+钢镚L1 整机由硬件设备、硬件控制与数据预处理、应用与系统接口、Robot Interface 和云端管理等部分组成。
 
-![ZSL-1 整机系统架构](../assets/images/system-architecture-v15.jpg)
+![钢镚L1 整机系统架构](../assets/images/system-architecture-v15.jpg)
 
 该图展示整机功能分层，不代表 SDK 已开放的接口清单。虚线框为选配或预留接口，实际支持范围由机型、固件和交付配置决定。
 
@@ -33,7 +33,7 @@ flowchart LR
     API --> TX["发送线程"]
     API --> RX["接收线程"]
     API --> HB["心跳线程"]
-    TX -->|"JSON / UDP :8081"| ROBOT["ZSL-1"]
+    TX -->|"JSON / UDP :8081"| ROBOT["钢镚L1"]
     HB -->|"周期心跳"| ROBOT
     ROBOT -->|"状态 / UDP :8080"| RX
     RX --> CACHE["线程安全状态缓存"]
@@ -56,7 +56,7 @@ flowchart LR
 sequenceDiagram
     participant App as 用户程序
     participant SDK as ZsibotExecutor
-    participant Robot as ZSL-1
+    participant Robot as 钢镚L1
     App->>SDK: 构造 ROLE_SDK
     SDK->>Robot: 心跳携带 SDK 身份
     Robot-->>SDK: 返回状态数据
@@ -81,7 +81,7 @@ JSON 负责组织命令、角色、遥控量和状态字段，UDP 负责低延�
 
 ```mermaid
 flowchart LR
-    PC["Ubuntu 开发电脑"] -->|"控制、命令、心跳<br>UDP 8081"| DOG["ZSL-1<br>192.168.234.1"]
+    PC["Ubuntu 开发电脑"] -->|"控制、命令、心跳<br>UDP 8081"| DOG["钢镚L1<br>192.168.234.1"]
     DOG -->|"设备与传感器状态<br>UDP 8080"| PC
 ```
 
