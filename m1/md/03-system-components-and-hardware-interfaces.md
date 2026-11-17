@@ -1,4 +1,4 @@
-# M1 系统组成与硬件接口
+# M1 系统组成、硬件接口与结构设计资料
 
 [返回文档总览](../index.md) | [设备使用与维护](./02-operation-and-maintenance.md) | [M1 SDK 快速开始](./04-sdk-quickstart.md)
 
@@ -26,6 +26,8 @@ M1 的系统主要由运控主机、导航主机、交换机、传感器、扩�
 
 ## 网络结构与通信端口
 
+机器人 Wi-Fi 热点名称为 `M1-xxxxxxx`，出厂密码为 `12345678`。
+
 开发主机可以通过机器人 WiFi-AP 或外部网口接入系统。运控主机的 WiFi-AP 地址为 `192.168.234.1`，有线地址为 `192.168.168.168`；导航主机的有线 IP 和无线 IP 均为 `192.168.168.100`。本节用于说明网络结构和端口用途，实际连接和测试步骤见 [M1 SDK 快速开始](./04-sdk-quickstart.md#连接机器人)。
 
 | 设备 | 端口 | 协议 / 用途 |
@@ -35,6 +37,12 @@ M1 的系统主要由运控主机、导航主机、交换机、传感器、扩�
 | 机器狗 | 8554 | RTSP 视频流 |
 
 SDK 构造函数默认使用 `TransportProtocol::Udp`。如果使用 WebSocket，需要在构造 `SDKClient` 时指定协议，并连接 `8081` 端口。
+
+### 算力主机 SSH 登录
+
+| 机型 | 算力板 | 登录 IP | 用户名 | 密码 |
+| --- | --- | --- | --- | --- |
+| M1 | NX/S100 | `192.168.168.100` | `robot` | `1` |
 
 ## 扩展仓
 
@@ -58,6 +66,17 @@ SDK 构造函数默认使用 `TransportProtocol::Udp`。如果使用 WebSocket�
 - 所有扩展供电接口的总功率不超过 480 W。
 - 为保持 IP67，未使用的航空插头必须盖好防护盖。
 - 执行爬高台特技时，机器人必须空载且电池电量不少于两格。
+
+## 负载设计参考与模型下载 {#payload-model-downloads}
+
+上装设计可查阅负载能力设计参考和上装空间示意图，并用 STP 外观模型核对装配空间。进行仿真或运动学建模时，可下载 URDF 模型。
+
+| 资料 | 用途 | 下载 |
+| --- | --- | --- |
+| 铜锤 M1 负载能力设计参考 | 查阅负载设计参考值 | [下载 PDF](../assets/downloads/m1-payload-design-reference.pdf) |
+| 铜锤 M1 上装空间推荐示意图 | 查看推荐的上装布置空间 | [下载 PDF](../assets/downloads/m1-mounting-space-reference.pdf) |
+| 铜锤 M1 外观模型 | 用于查看外观尺寸和核对装配空间 | <a href="../assets/downloads/m1-exterior-model.zip" download>下载 STP 模型（ZIP）</a> |
+| 铜锤 M1 URDF 模型 | 用于查看机器人连杆、关节和几何模型 | <a href="../assets/downloads/m1-urdf.zip" download>下载 URDF（ZIP）</a> |
 
 ## 视频流
 

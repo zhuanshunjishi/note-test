@@ -1,6 +1,6 @@
 # M1 SDK 快速开始
 
-[返回文档总览](../index.md) | [系统组成与硬件接口](./03-system-components-and-hardware-interfaces.md) | [SDK 控制流程与任务机制](./05-sdk-control-flow-and-task-handling.md) | [M1 SDK 接口参考](./06-sdk-api-reference.md)
+[返回文档总览](../index.md) | [系统组成、硬件接口与结构设计资料](./03-system-components-and-hardware-interfaces.md) | [SDK 控制流程与任务机制](./05-sdk-control-flow-and-task-handling.md) | [M1 SDK 接口参考](./06-sdk-api-reference.md)
 
 ## 开发环境
 
@@ -49,6 +49,8 @@ SDK 需要 Linux 环境编译。可以使用：
 ## 连接机器人
 
 ### WiFi 连接
+
+在开发电脑上连接机器人热点 `M1-xxxxxxx`，出厂密码为 `12345678`。
 
 机器人 WiFi-AP 地址为 `192.168.234.1`，默认 UDP SDK 端口为 `8082`：
 

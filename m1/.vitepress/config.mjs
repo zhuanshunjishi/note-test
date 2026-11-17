@@ -1,3 +1,5 @@
+import { cp } from 'node:fs/promises'
+import { join } from 'node:path'
 import { defineConfig } from 'vitepress'
 
 export default defineConfig({
@@ -5,6 +7,11 @@ export default defineConfig({
   title: '智身钢镚M1 SDK 开发文档',
   description: '铜锤 M1 系列的设备使用、SDK 开发和接口参考',
   base: '/note-test/m1/',
+  async buildEnd({ srcDir, outDir }) {
+    await cp(join(srcDir, 'assets', 'downloads'), join(outDir, 'assets', 'downloads'), {
+      recursive: true,
+    })
+  },
   themeConfig: {
     nav: [
       { text: '首页', link: '/' },
@@ -16,7 +23,7 @@ export default defineConfig({
         items: [
           { text: '产品介绍与规格', link: '/md/01-product-introduction-and-specifications' },
           { text: '设备使用与维护', link: '/md/02-operation-and-maintenance' },
-          { text: '系统组成与硬件接口', link: '/md/03-system-components-and-hardware-interfaces' },
+          { text: '系统组成、硬件接口与结构设计资料', link: '/md/03-system-components-and-hardware-interfaces' },
         ],
       },
       {

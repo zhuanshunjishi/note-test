@@ -14,7 +14,7 @@ M1 SDK 的核心类是 `robot_sdk::SDKClient`。应用程序通过 `SDKClient` �
 | --- | --- | --- |
 | [1. M1 产品介绍与规格](./md/01-product-introduction-and-specifications.md) | M1 系列各版本的外观、参数、传感器和软件能力 | 选型或初次了解产品时阅读 |
 | [2. M1 设备使用与维护](./md/02-operation-and-maintenance.md) | 使用准备、开关机、遥控器、运动模式、安全保护、换电、充电和维护 | 首次操作设备前阅读 |
-| [3. M1 系统组成与硬件接口](./md/03-system-components-and-hardware-interfaces.md) | 系统模块、网络结构、通信端口、扩展仓和视频接口 | 接入网络或安装上装设备前阅读 |
+| [3. M1 系统组成、硬件接口与结构设计资料](./md/03-system-components-and-hardware-interfaces.md) | 介绍系统组成、网络通信、扩展仓和视频接口，并提供[上装空间示意图、负载设计参考、外观模型和 URDF 模型](./md/03-system-components-and-hardware-interfaces.md#payload-model-downloads)。 | 接入网络或安装上装设备前阅读 |
 | [4. M1 SDK 快速开始](./md/04-sdk-quickstart.md) | 开发环境、SDK 目录、连接、编译、运行和自定义工程 | 第一次运行 SDK 时阅读 |
 | [5. M1 SDK 控制流程与任务机制](./md/05-sdk-control-flow-and-task-handling.md) | 调用结果层级、同步与异步、控制权、回充和状态切换 | 编写正式控制程序前阅读 |
 | [6. M1 SDK 接口参考](./md/06-sdk-api-reference.md) | `SDKClient` 的函数原型、参数、返回值和应答 | 编码时按功能查询 |

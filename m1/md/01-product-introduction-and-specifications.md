@@ -1,12 +1,14 @@
 # M1 产品介绍与规格
 
-[返回文档总览](../index.md) | [设备使用与维护](./02-operation-and-maintenance.md) | [系统组成与硬件接口](./03-system-components-and-hardware-interfaces.md)
+[返回文档总览](../index.md) | [设备使用与维护](./02-operation-and-maintenance.md) | [系统组成、硬件接口与结构设计资料](./03-system-components-and-hardware-interfaces.md)
 
 ## 产品概述
 
 铜锤 M1 是一款轮足式仿生四足机器人，具备自重轻、负载大、续航长、防护强、运动灵活稳定等特点；机器狗每条腿配备 3 个关节电机和 1 个轮毂电机，配备激光雷达、光学相机、超声波雷达、IMU、RTK 模块等感知设备，并配置补光灯。内部搭载高算力主控平台，用于实现运动控制、自主导航定位、环境侦检等功能，提供丰富的供电和通信接口，支持多品类任务载荷扩展。
 
 ![M1 外形尺寸](../assets/product/m1-dimensions.png)
+
+进行上装设计时，可结合外形尺寸图和上装空间示意图核对布置空间，再查阅负载能力设计参考。相关 PDF、CAD 外观模型和 URDF 模型可在第 3 章的[负载设计参考与模型下载](./03-system-components-and-hardware-interfaces.md#payload-model-downloads)中获取。
 
 ## 产品规格
 
