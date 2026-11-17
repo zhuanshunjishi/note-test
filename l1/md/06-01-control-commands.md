@@ -123,41 +123,43 @@
 
 示例：
 
-    #include "zsibot_sdk/zsibot_api.h"
-    #include <array>
-    #include <chrono>
-    #include <thread>
+```cpp
+#include "zsibot_sdk/zsibot_api.h"
+#include <array>
+#include <chrono>
+#include <thread>
 
-    using namespace zsibot;
+using namespace zsibot;
 
-    int main()
-    {
-        ZsibotExecutor robot(Role::ROLE_SDK);
+int main()
+{
+    ZsibotExecutor robot(Role::ROLE_SDK);
 
-        // 仅在状态反馈确认已经进入 SDK 模式后发送运动输入。
-        if (!robot.IsConnected()
-            || robot.GetFunctionMode() != FunctionMode::FM_SDK) {
-            return 1;
-        }
-
-        // 前进
-        robot.SetRemote({0.5f, 0.0f, 0.0f, 0.0f},
-                        std::array<float32_t, 14>{0.0f});
-
-        // 停止连续运动
-        robot.SetRemote({0.0f, 0.0f, 0.0f, 0.0f},
-                        std::array<float32_t, 14>{0.0f});
-
-        robot.SetCmd(CmdCode::CMD_REMOTE_CONTROL_RIGHT);
-        const auto deadline = std::chrono::steady_clock::now()
-                            + std::chrono::seconds(5);
-        while (robot.GetFunctionMode() != FunctionMode::FM_REMOTE
-               && std::chrono::steady_clock::now() < deadline) {
-            std::this_thread::sleep_for(std::chrono::milliseconds(100));
-        }
-
-        return robot.GetFunctionMode() == FunctionMode::FM_REMOTE ? 0 : 2;
+    // 仅在状态反馈确认已经进入 SDK 模式后发送运动输入。
+    if (!robot.IsConnected()
+        || robot.GetFunctionMode() != FunctionMode::FM_SDK) {
+        return 1;
     }
+
+    // 前进
+    robot.SetRemote({0.5f, 0.0f, 0.0f, 0.0f},
+                    std::array<float32_t, 14>{0.0f});
+
+    // 停止连续运动
+    robot.SetRemote({0.0f, 0.0f, 0.0f, 0.0f},
+                    std::array<float32_t, 14>{0.0f});
+
+    robot.SetCmd(CmdCode::CMD_REMOTE_CONTROL_RIGHT);
+    const auto deadline = std::chrono::steady_clock::now()
+                        + std::chrono::seconds(5);
+    while (robot.GetFunctionMode() != FunctionMode::FM_REMOTE
+           && std::chrono::steady_clock::now() < deadline) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    }
+
+    return robot.GetFunctionMode() == FunctionMode::FM_REMOTE ? 0 : 2;
+}
+```
 
 ## 推荐调用顺序
 

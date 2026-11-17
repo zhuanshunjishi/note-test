@@ -39,18 +39,20 @@
 
 ## 调用示例
 
-    auto faults = robot.GetFaultInfo();
-    if (faults.empty()) {
-        std::cout << "当前没有故障信息\n";
-    } else {
-        for (const auto &fault : faults) {
-            std::cout << fault.module << " / "
-                      << fault.submodule << " / "
-                      << fault.error_code << " / "
-                      << fault.level << " / "
-                      << fault.info << '\n';
-        }
+```cpp
+auto faults = robot.GetFaultInfo();
+if (faults.empty()) {
+    std::cout << "当前没有故障信息\n";
+} else {
+    for (const auto &fault : faults) {
+        std::cout << fault.module << " / "
+                  << fault.submodule << " / "
+                  << fault.error_code << " / "
+                  << fault.level << " / "
+                  << fault.info << '\n';
     }
+}
+```
 
 ## 推荐检查时机
 

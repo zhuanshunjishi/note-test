@@ -270,8 +270,8 @@
     </tr>
     <tr>
       <th class="specification-label">拓展算力</th>
-      <td>未配置 Orin NX</td>
-      <td>未配置 Orin NX</td>
+      <td>未配置</td>
+      <td>未配置</td>
       <td>Jetson Orin NX 16 GB<br>约 100 TOPS</td>
       <td>Jetson Orin NX 16 GB<br>约 100 TOPS</td>
       <td>Jetson Orin NX 16 GB<br>约 100 TOPS</td>
@@ -344,15 +344,6 @@
       <td><code>MODEL_XGW</code></td>
     </tr>
     <tr>
-      <th class="specification-label">基础 SDK / 通信</th>
-      <td>HighLevel</td>
-      <td>HighLevel</td>
-      <td>HighLevel</td>
-      <td>HighLevel</td>
-      <td>HighLevel</td>
-      <td>HighLevel</td>
-    </tr>
-    <tr>
       <th class="specification-label">导航软件包</th>
       <td>未包含</td>
       <td>未包含</td>
@@ -402,7 +393,7 @@
 
 ### SDK 机型识别
 
-新版本 SDK 的 <code>Model</code> 枚举可区分点足和轮足机型：
+钢镚L1 SDK 的 <code>Model</code> 枚举可区分点足和轮足机型：
 
 <div class="specification-table model-table" role="region" aria-label="SDK 机型枚举表" tabindex="0">
 <table>

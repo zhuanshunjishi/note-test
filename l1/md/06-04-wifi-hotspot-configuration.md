@@ -48,18 +48,20 @@ WiFi 热点配置接口对应红框中的“WiFi 热点配置端口”，用于�
 
 ## 调用示例
 
-    WifiInfo wifi;
-    wifi.ssid = "new_robot_wifi";
-    wifi.password = "new_password";
-    robot.SetWifi(wifi);
+```cpp
+WifiInfo wifi;
+wifi.ssid = "new_robot_wifi";
+wifi.password = "new_password";
+robot.SetWifi(wifi);
 
-    // 配置结果是异步返回的，不能在 SetWifi() 后立即假定成功
-    if (robot.IsRecvWifiResult()) {
-        auto result = robot.GetWifiResutlf();
-        if (result.has_value() && result.value()) {
-            // 配置成功，重新连接新的 WiFi
-        }
+// 配置结果是异步返回的，不能在 SetWifi() 后立即假定成功
+if (robot.IsRecvWifiResult()) {
+    auto result = robot.GetWifiResutlf();
+    if (result.has_value() && result.value()) {
+        // 配置成功，重新连接新的 WiFi
     }
+}
+```
 
 ## 推荐操作流程
 

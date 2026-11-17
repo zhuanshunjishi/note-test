@@ -51,11 +51,13 @@ SDK 使用 UDP 发送端口 `8081` 发送心跳，并通过接收端口 `8080` �
 
 示例：
 
-    ZsibotExecutor robot(Role::ROLE_SDK);
+```cpp
+ZsibotExecutor robot(Role::ROLE_SDK);
 
-    while (!robot.IsConnected()) {
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
-    }
+while (!robot.IsConnected()) {
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+}
+```
 
 ## 断开后的处理
 

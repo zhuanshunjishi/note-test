@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 202" width="760" height="202" role="img" aria-labelledby="title">
+  <title id="title">L1 UDP 通信方向和端口</title>
+  <defs>
+    <marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0 0 L9 4.5 L0 9 Z" fill="#38526b"/>
+    </marker>
+  </defs>
+  <style>
+    text {font-family: -apple-system, "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif; fill: #16283b;}
+    .label {font-size: 16px;}
+    .node {font-size: 18px; font-weight: 600;}
+    .box {fill: #eaf2fa; stroke: #6e8ca9; stroke-width: 1.5;}
+    .edge {fill: none; stroke: #38526b; stroke-width: 2; stroke-linejoin: round;}
+    .dashed {stroke-dasharray: 6 4;}
+    .lifeline {stroke: #8196ab; stroke-width: 1.5; stroke-dasharray: 5 5;}
+  </style>
+  <rect x="0.75" y="0.75" width="758.5" height="200.5" rx="12" fill="#fafcfe" stroke="#c7d5e3" stroke-width="1.5"/>
+  <rect x="28" y="70" width="189" height="67" rx="9" class="box"/>
+<text x="122.5" y="109.5" text-anchor="middle" class="node">Ubuntu 开发电脑</text>
+<rect x="543" y="70" width="189" height="67" rx="9" class="box"/>
+<text x="637.5" y="95" text-anchor="middle" class="node">钢镚L1</text>
+<text x="637.5" y="117" text-anchor="middle" class="label">192.168.234.1</text>
+<text x="380" y="39" text-anchor="middle" class="label">控制、命令、心跳</text>
+<text x="380" y="62" text-anchor="middle" class="label">UDP 8081</text>
+<path d="M 217 82 H 543" class="edge" marker-end="url(#arrow)"/>
+<path d="M 543 124 H 217" class="edge" marker-end="url(#arrow)"/>
+<text x="380" y="152" text-anchor="middle" class="label">设备与传感器状态</text>
+<text x="380" y="175" text-anchor="middle" class="label">UDP 8080</text>
+</svg>

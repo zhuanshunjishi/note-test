@@ -47,7 +47,7 @@
 
 ### SDK 能力
 
-新版钢镚L1 SDK 通过 `zsibot::ZsibotExecutor` 提供统一的 HighLevel C++ 接口。
+钢镚L1 SDK 通过 `zsibot::ZsibotExecutor` 提供统一的 HighLevel C++ 接口。
 
 主要能力包括：
 
@@ -68,42 +68,19 @@
 
 `Role` 表示程序连接 SDK 时使用的通信身份，控制权表示机器人当前接受哪一类控制源，两者不是同一个概念。构造 `ROLE_SDK` 不等于已经获得 SDK 控制权；程序仍需发送相应的控制权命令，并根据 `GetFunctionMode()` 的反馈确认切换结果。
 
-```mermaid
-sequenceDiagram
-    participant App as 用户程序
-    participant SDK as ZsibotExecutor
-    participant Robot as 钢镚L1
-    App->>SDK: 构造 ROLE_SDK
-    SDK->>Robot: 心跳携带 SDK 身份
-    Robot-->>SDK: 返回状态数据
-    App->>SDK: CMD_SDK_CONTROL_RIGHT
-    SDK->>Robot: 申请 SDK 控制权
-    Robot-->>SDK: 返回控制模式
-    App->>SDK: SetCmd / SetRemote
-```
+![L1 SDK 控制权申请时序图](../assets/images/diagrams/sdk-control-sequence.svg)
 
 ## 通信与连接
 
 ### HighLevel 通信结构
 
-```mermaid
-flowchart LR
-    APP["用户程序"] --> API["ZsibotExecutor"]
-    API --> TX["发送线程"]
-    API --> RX["接收线程"]
-    API --> HB["心跳线程"]
-    TX -->|"JSON / UDP :8081"| ROBOT["钢镚L1"]
-    HB -->|"周期心跳"| ROBOT
-    ROBOT -->|"状态 / UDP :8080"| RX
-    RX --> CACHE["线程安全状态缓存"]
-    CACHE --> API
-```
+![L1 HighLevel 通信结构](../assets/images/diagrams/highlevel-communication.svg)
 
 构造 `ZsibotExecutor` 时启动通信线程，公开的 getter 从内部状态缓存读取最近一次状态。析构对象时停止通信并等待线程结束。
 
 ### JSON over UDP
 
-新版 HighLevel 默认使用 JSON over UDP：
+HighLevel 默认使用 JSON over UDP：
 
 | 方向 | 默认目标 |
 | --- | --- |
@@ -114,11 +91,7 @@ flowchart LR
 
 JSON 负责组织命令、角色、遥控量和状态字段，UDP 负责低延迟网络传输。UDP 不保证每个数据包都到达，因此应用应使用状态反馈、超时和连接检查处理丢包或失联。
 
-```mermaid
-flowchart LR
-    PC["Ubuntu 开发电脑"] -->|"控制、命令、心跳<br>UDP 8081"| DOG["钢镚L1<br>192.168.234.1"]
-    DOG -->|"设备与传感器状态<br>UDP 8080"| PC
-```
+![L1 UDP 通信方向和端口](../assets/images/diagrams/udp-communication.svg)
 
 ### 心跳与连接
 
@@ -133,6 +106,8 @@ flowchart LR
 
 ## 工程目录与静态库
 
+SDK 源码和示例见 [Genisom L1 SDK GitHub 仓库](https://github.com/zsibot/genisom_L1_sdk/tree/main)。
+
 ```text
 genisom_l1_sdk/
 ├── CMakeLists.txt
@@ -141,7 +116,9 @@ genisom_l1_sdk/
 ├── include/zsibot_sdk/
 │   ├── zsibot_api.h
 │   ├── zsibot_define.h
-│   └── zsibot_exception.h
+│   ├── zsibot_exception.h
+│   └── lowlevel/
+│       └── lowlevel.h
 └── lib/
     ├── x86_64/libzsibot.a
     └── aarch64/libzsibot.a

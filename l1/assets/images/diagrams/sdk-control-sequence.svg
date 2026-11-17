@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 486" width="760" height="486" role="img" aria-labelledby="title">
+  <title id="title">L1 SDK 控制权申请时序图</title>
+  <defs>
+    <marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0 0 L9 4.5 L0 9 Z" fill="#38526b"/>
+    </marker>
+  </defs>
+  <style>
+    text {font-family: -apple-system, "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif; fill: #16283b;}
+    .label {font-size: 16px;}
+    .node {font-size: 18px; font-weight: 600;}
+    .box {fill: #eaf2fa; stroke: #6e8ca9; stroke-width: 1.5;}
+    .edge {fill: none; stroke: #38526b; stroke-width: 2; stroke-linejoin: round;}
+    .dashed {stroke-dasharray: 6 4;}
+    .lifeline {stroke: #8196ab; stroke-width: 1.5; stroke-dasharray: 5 5;}
+  </style>
+  <rect x="0.75" y="0.75" width="758.5" height="484.5" rx="12" fill="#fafcfe" stroke="#c7d5e3" stroke-width="1.5"/>
+  <path d="M 115 69 V 463" class="lifeline"/>
+<path d="M 380 69 V 463" class="lifeline"/>
+<path d="M 645 69 V 463" class="lifeline"/>
+<rect x="24" y="23" width="182" height="46" rx="9" class="box"/>
+<text x="115.0" y="52.0" text-anchor="middle" class="node">用户程序</text>
+<rect x="289" y="23" width="182" height="46" rx="9" class="box"/>
+<text x="380.0" y="52.0" text-anchor="middle" class="node">ZsibotExecutor</text>
+<rect x="554" y="23" width="182" height="46" rx="9" class="box"/>
+<text x="645.0" y="52.0" text-anchor="middle" class="node">钢镚L1</text>
+<text x="247.5" y="108" text-anchor="middle" class="label">构造 ROLE_SDK</text>
+<path d="M 115 118 H 380" class="edge" marker-end="url(#arrow)"/>
+<text x="512.5" y="162" text-anchor="middle" class="label">心跳携带 SDK 身份</text>
+<path d="M 380 172 H 645" class="edge" marker-end="url(#arrow)"/>
+<text x="512.5" y="216" text-anchor="middle" class="label">返回状态数据</text>
+<path d="M 645 226 H 380" class="edge dashed" marker-end="url(#arrow)"/>
+<text x="247.5" y="270" text-anchor="middle" class="label">CMD_SDK_CONTROL_RIGHT</text>
+<path d="M 115 280 H 380" class="edge" marker-end="url(#arrow)"/>
+<text x="512.5" y="324" text-anchor="middle" class="label">申请 SDK 控制权</text>
+<path d="M 380 334 H 645" class="edge" marker-end="url(#arrow)"/>
+<text x="512.5" y="378" text-anchor="middle" class="label">返回控制模式</text>
+<path d="M 645 388 H 380" class="edge dashed" marker-end="url(#arrow)"/>
+<text x="247.5" y="432" text-anchor="middle" class="label">SetCmd / SetRemote</text>
+<path d="M 115 442 H 380" class="edge" marker-end="url(#arrow)"/>
+</svg>

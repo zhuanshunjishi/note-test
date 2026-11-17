@@ -36,33 +36,6 @@ SDK 源码、版本说明和示例程序见 GitHub：[zsibot/genisom_l1_sdk](htt
 
 如果需要修改 IP 或端口，应在构造 `ZsibotExecutor` 时传入参数。应用层一般不需要自己创建 UDP socket，也不需要重复发送心跳。
 
-## 接口关系
-
-```text
-ZsibotExecutor
-    |
-    +-- 控制指令接口
-    |       +-- SetCmd()
-    |       +-- SetRemote()
-    |
-    +-- 传感器实时上报接口
-    |       +-- 基础状态
-    |       +-- 姿态与 IMU
-    |       +-- 里程计
-    |       +-- 电机与关节
-    |
-    +-- 心跳检测接口
-    |       +-- SDK 内部心跳线程
-    |       +-- IsConnected()
-    |
-    +-- WiFi 热点配置接口
-    |       +-- SetWifi()
-    |       +-- 读取配置结果
-    |
-    +-- 故障信息查询接口
-            +-- GetFaultInfo()
-```
-
 ## 推荐调用顺序
 
 1. 创建 `ZsibotExecutor`。
@@ -76,50 +49,52 @@ ZsibotExecutor
 
 ## 最小流程示例
 
-    #include "zsibot_sdk/zsibot_api.h"
-    #include <chrono>
-    #include <thread>
+```cpp
+#include "zsibot_sdk/zsibot_api.h"
+#include <chrono>
+#include <thread>
 
-    using namespace zsibot;
+using namespace zsibot;
 
-    int main()
-    {
-        ZsibotExecutor robot(Role::ROLE_SDK);
+int main()
+{
+    ZsibotExecutor robot(Role::ROLE_SDK);
 
-        const auto connect_deadline = std::chrono::steady_clock::now()
-                                    + std::chrono::seconds(5);
-        while (!robot.IsConnected()
-               && std::chrono::steady_clock::now() < connect_deadline) {
-            std::this_thread::sleep_for(std::chrono::milliseconds(100));
-        }
-
-        if (!robot.IsConnected()) {
-            return 1;
-        }
-
-        robot.SetCmd(CmdCode::CMD_SDK_CONTROL_RIGHT);
-
-        const auto control_deadline = std::chrono::steady_clock::now()
-                                    + std::chrono::seconds(5);
-        while (robot.GetFunctionMode() != FunctionMode::FM_SDK
-               && std::chrono::steady_clock::now() < control_deadline) {
-            std::this_thread::sleep_for(std::chrono::milliseconds(100));
-        }
-
-        if (robot.GetFunctionMode() != FunctionMode::FM_SDK) {
-            return 2;
-        }
-
-        robot.SetCmd(CmdCode::CMD_REMOTE_CONTROL_RIGHT);
-        const auto remote_deadline = std::chrono::steady_clock::now()
-                                   + std::chrono::seconds(5);
-        while (robot.GetFunctionMode() != FunctionMode::FM_REMOTE
-               && std::chrono::steady_clock::now() < remote_deadline) {
-            std::this_thread::sleep_for(std::chrono::milliseconds(100));
-        }
-
-        return robot.GetFunctionMode() == FunctionMode::FM_REMOTE ? 0 : 3;
+    const auto connect_deadline = std::chrono::steady_clock::now()
+                                + std::chrono::seconds(5);
+    while (!robot.IsConnected()
+           && std::chrono::steady_clock::now() < connect_deadline) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
+
+    if (!robot.IsConnected()) {
+        return 1;
+    }
+
+    robot.SetCmd(CmdCode::CMD_SDK_CONTROL_RIGHT);
+
+    const auto control_deadline = std::chrono::steady_clock::now()
+                                + std::chrono::seconds(5);
+    while (robot.GetFunctionMode() != FunctionMode::FM_SDK
+           && std::chrono::steady_clock::now() < control_deadline) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    }
+
+    if (robot.GetFunctionMode() != FunctionMode::FM_SDK) {
+        return 2;
+    }
+
+    robot.SetCmd(CmdCode::CMD_REMOTE_CONTROL_RIGHT);
+    const auto remote_deadline = std::chrono::steady_clock::now()
+                               + std::chrono::seconds(5);
+    while (robot.GetFunctionMode() != FunctionMode::FM_REMOTE
+           && std::chrono::steady_clock::now() < remote_deadline) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    }
+
+    return robot.GetFunctionMode() == FunctionMode::FM_REMOTE ? 0 : 3;
+}
+```
 
 ## 使用注意事项
 
