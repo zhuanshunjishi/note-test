@@ -3,9 +3,18 @@
 }
 
 @media (min-width: 960px) {
-  /* Keep scrolling sidebar text below the fixed logo and title. */
-  .VPSidebar .curtain {
-    top: 0;
+  .VPNavBar.has-sidebar .container > .title {
+    background-color: var(--vp-sidebar-bg-color);
+  }
+
+  /* Begin the sidebar scroll area below the fixed header. */
+  .Layout > .VPSidebar {
+    top: calc(var(--vp-layout-top-height, 0px) + var(--vp-nav-height));
+    padding-top: 0;
+  }
+
+  .VPSidebar > .curtain {
+    display: none;
   }
 }
 
