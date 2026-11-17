@@ -1,5 +1,3 @@
-<img src="./pages/assets/genisomai-logo.png" alt="GenisomAI" width="160"> <img src="./pages/assets/eai-logo.png" alt="EAI Academy" width="80">
-
 **开发者文档**
 
 [智身钢镚L1文档](https://zhuanshunjishi.github.io/note-test/l1/) · [智身铜锤M1文档](https://zhuanshunjishi.github.io/note-test/m1/)
