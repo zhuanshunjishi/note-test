@@ -7,6 +7,8 @@
 
 L1 和 M1 文档分别位于 `l1/` 和 `m1/`。两个文档站各自构建，共用一个 GitHub Pages 发布流程。[仓库站点首页](https://zhuanshunjishi.github.io/note-test/)提供两个入口。
 
+产品原图放在 `photos/`，首页使用的压缩图片放在 `pages/assets/`。
+
 ## 本地预览
 
 安装 Node.js 22 后，在仓库根目录运行一次 `npm ci`。启动所需的文档站，按终端显示的地址打开。
