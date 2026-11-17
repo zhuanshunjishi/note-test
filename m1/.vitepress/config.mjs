@@ -2,7 +2,7 @@ import { defineConfig } from 'vitepress'
 
 export default defineConfig({
   lang: 'zh-CN',
-  title: '铜锤 M1 开发者文档',
+  title: '智身钢镚M1 SDK 开发文档',
   description: '铜锤 M1 系列的设备使用、SDK 开发和接口参考',
   base: '/note-test/m1/',
   themeConfig: {

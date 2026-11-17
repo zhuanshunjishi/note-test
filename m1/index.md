@@ -1,4 +1,4 @@
-# 铜锤 M1 开发者文档
+# 智身钢镚M1 SDK 开发文档
 
 ![铜锤 M1 沙漠地形测试](./assets/product/m1-desert-terrain-test.jpg)
 

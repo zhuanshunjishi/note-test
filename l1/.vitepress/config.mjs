@@ -4,7 +4,7 @@ import { defineConfig } from 'vitepress'
 
 export default defineConfig({
   lang: 'zh-CN',
-  title: '钢镚L1 SDK 开发文档',
+  title: '智身钢镚L1 SDK 开发文档',
   description: '钢镚L1 系列的使用指南、SDK 开发说明和接口参考',
   base: '/note-test/l1/',
   async buildEnd({ srcDir, outDir }) {
