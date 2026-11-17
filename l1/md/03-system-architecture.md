@@ -1,10 +1,53 @@
 # 硬件、软件与结构架构
 
-[返回首页](../index.md) | [SDK 软件服务接口](./06-sdk-service-interfaces.md) | [SDK 开发与运行指南](./08-sdk-development-guide.md) | [本体相机视频流](./07-onboard-camera-stream.md)
+[返回首页](../index.md) | [硬件接口](./04-hardware-interfaces.md) | [SDK 软件服务接口](./06-sdk-service-interfaces.md) | [SDK 开发与运行指南](./08-sdk-development-guide.md) | [本体相机视频流](./07-onboard-camera-stream.md)
 
-## SDK 简介
+## 系统架构
 
-新版 钢镚L1 SDK 通过 `zsibot::ZsibotExecutor` 提供统一的 HighLevel C++ 接口。
+钢镚L1 整机由硬件设备、硬件控制与数据预处理、应用与系统接口、Robot Interface 和云端管理等部分组成。
+
+![钢镚L1 整机系统架构](../assets/images/system-architecture-v15.jpg)
+
+该图展示整机功能分层，不代表 SDK 已开放的接口清单。虚线框为选配或预留接口，实际支持范围由机型、固件和交付配置决定。
+
+## 结构与安装
+
+<a id="dimensions"></a>
+
+### 钢镚L1 尺寸与安装参考
+
+![钢镚L1 本体尺寸与安装孔位（单位：mm）](../assets/images/dimensions/zsl-1-dimensions.png)
+
+<a id="payload-model-downloads"></a>
+
+### 负载设计参考与模型下载
+
+#### 钢镚L1
+
+| 资料 | 用途 | 下载 |
+| --- | --- | --- |
+| 钢镚L1 负载能力设计参考 | 查看不同负载质心位置对应的负载参考值、坐标定义和实验条件 | [下载 PDF](../assets/downloads/zsl-1-payload-design-reference.pdf) |
+| 钢镚L1 外观模型 | 用于外观尺寸查看、上装布局和空间配合参考 | <a href="../assets/downloads/zsl-1-exterior-model.stp" download>下载 STP 模型</a> |
+| 钢镚L1 URDF 模型 | 用于查看机器人连杆、关节及碰撞几何 | <a href="../assets/downloads/zsl-1-urdf.rar" download>下载 URDF</a> |
+
+#### L1-W
+
+| 资料 | 用途 | 下载 |
+| --- | --- | --- |
+| L1-W 外观模型 | 用于查看外观尺寸和规划上装布局，解压 ZIP 后获得 STP 文件 | <a href="../assets/downloads/l1-w-exterior-model.zip" download>下载 STP 模型</a> |
+| L1-W URDF 模型 | 用于查看连杆、关节和网格，主模型为 `xg_wheel_su/urdf/xg_wheel_su.urdf` | <a href="../assets/downloads/l1-w-urdf.rar" download>下载 URDF</a> |
+
+#### L1 EDU
+
+| 资料 | 用途 | 下载 |
+| --- | --- | --- |
+| L1 EDU 外观模型 | 用于查看外观尺寸和规划上装布局 | <a href="../assets/downloads/l1-edu-exterior-model.step" download>下载 STEP 模型</a> |
+
+## SDK 与控制权
+
+### SDK 能力
+
+新版钢镚L1 SDK 通过 `zsibot::ZsibotExecutor` 提供统一的 HighLevel C++ 接口。
 
 主要能力包括：
 
@@ -15,34 +58,7 @@
 - 通过独立线程处理发送、接收和心跳
 - 支持 `x86_64` 和 `aarch64` Linux 平台
 
-## 系统架构
-
-### 整机系统分层
-
-钢镚L1 整机由硬件设备、硬件控制与数据预处理、应用与系统接口、Robot Interface 和云端管理等部分组成。
-
-![钢镚L1 整机系统架构](../assets/images/system-architecture-v15.jpg)
-
-该图展示整机功能分层，不代表 SDK 已开放的接口清单。虚线框为选配或预留接口，实际支持范围由机型、固件和交付配置决定。
-
-### HighLevel 通信结构
-
-```mermaid
-flowchart LR
-    APP["用户程序"] --> API["ZsibotExecutor"]
-    API --> TX["发送线程"]
-    API --> RX["接收线程"]
-    API --> HB["心跳线程"]
-    TX -->|"JSON / UDP :8081"| ROBOT["钢镚L1"]
-    HB -->|"周期心跳"| ROBOT
-    ROBOT -->|"状态 / UDP :8080"| RX
-    RX --> CACHE["线程安全状态缓存"]
-    CACHE --> API
-```
-
-构造 `ZsibotExecutor` 时启动通信线程，公开的 getter 从内部状态缓存读取最近一次状态。析构对象时停止通信并等待线程结束。
-
-## 控制权类型
+### 控制权类型
 
 | 控制权 | 含义 | 适用场景 |
 | --- | --- | --- |
@@ -66,7 +82,26 @@ sequenceDiagram
     App->>SDK: SetCmd / SetRemote
 ```
 
-## JSON over UDP
+## 通信与连接
+
+### HighLevel 通信结构
+
+```mermaid
+flowchart LR
+    APP["用户程序"] --> API["ZsibotExecutor"]
+    API --> TX["发送线程"]
+    API --> RX["接收线程"]
+    API --> HB["心跳线程"]
+    TX -->|"JSON / UDP :8081"| ROBOT["钢镚L1"]
+    HB -->|"周期心跳"| ROBOT
+    ROBOT -->|"状态 / UDP :8080"| RX
+    RX --> CACHE["线程安全状态缓存"]
+    CACHE --> API
+```
+
+构造 `ZsibotExecutor` 时启动通信线程，公开的 getter 从内部状态缓存读取最近一次状态。析构对象时停止通信并等待线程结束。
+
+### JSON over UDP
 
 新版 HighLevel 默认使用 JSON over UDP：
 
@@ -85,7 +120,7 @@ flowchart LR
     DOG -->|"设备与传感器状态<br>UDP 8080"| PC
 ```
 
-## 心跳与连接
+### 心跳与连接
 
 心跳是 SDK 周期性发送的在线信号，用于维持通信身份并判断连接是否仍然有效。
 

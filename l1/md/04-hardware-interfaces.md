@@ -4,28 +4,11 @@
 
 ## 适用范围
 
-本页说明机器人本体用于二次开发的尺寸、负载设计参考、外观模型、外部接口及已公开的供电参数。
+本页说明机器人本体用于二次开发的外部接口及已公开的供电参数。
 
 软件通信和控制程序请查看[硬件、软件与结构架构](./03-system-architecture.md)及[SDK 软件服务接口](./06-sdk-service-interfaces.md)。
 
-<a id="dimensions"></a>
-
-## 钢镚L1 尺寸与安装参考
-
-![钢镚L1 本体尺寸与安装孔位（单位：mm）](../assets/images/dimensions/zsl-1-dimensions.png)
-
-<a id="payload-model-downloads"></a>
-
-## 负载设计参考与模型下载
-
-| 资料 | 用途 | 下载 |
-| --- | --- | --- |
-| 钢镚L1 负载能力设计参考 | 查看不同负载质心位置对应的负载参考值、坐标定义和实验条件 | [下载 PDF](../assets/downloads/zsl-1-payload-design-reference.pdf) |
-| 钢镚L1 外观模型 | 用于外观尺寸查看、上装布局和空间配合参考 | <a href="../assets/downloads/zsl-1-exterior-model.stp" download>下载 STP 模型</a> |
-
-负载参考 PDF 中的表格数据为仿真实验结果，条件为平坦路面、机器人以 2 m/s 速度奔跑。实际应用需结合质心位置、路面和运动工况调整；上下坡、上下楼梯时应降低负载。具体坐标定义和适用条件请查看 PDF。
-
-以上资料针对 钢镚L1，其他机型及带上装配置应结合实际设备核对尺寸和可用载荷。
+结构设计资料见[钢镚L1 尺寸与安装参考](./03-system-architecture.md#dimensions)和[负载设计参考与模型下载](./03-system-architecture.md#payload-model-downloads)。
 
 ## 机身拓展接口
 
