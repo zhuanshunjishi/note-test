@@ -46,9 +46,20 @@
         font-weight: 700;
       }
 
-      .brand span {
-        color: var(--accent);
-        white-space: nowrap;
+      .brand-logos {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .brand-logos img {
+        display: block;
+        width: auto;
+        height: 28px;
+      }
+
+      .brand-logos img:last-child {
+        height: 24px;
       }
 
       .brand strong {
@@ -116,11 +127,13 @@
         transition: border-color 160ms ease, box-shadow 160ms ease;
       }
 
-      .product:hover,
-      .product:focus-visible {
+      a.product:hover,
+      a.product:focus-visible {
         border-color: #bd766e;
         box-shadow: 0 8px 24px #252d4410;
       }
+
+      .product-l2 { grid-column: 1 / -1; }
 
       .product-image {
         display: grid;
@@ -142,7 +155,7 @@
         transition: transform 180ms ease;
       }
 
-      .product:hover img { transform: translateY(-3px); }
+      a.product:hover img { transform: translateY(-3px); }
 
       .product-copy {
         align-self: center;
@@ -161,6 +174,8 @@
         font-size: 0.875rem;
         line-height: 1.65;
       }
+
+      .product-l2 p { margin-bottom: 0; }
 
       .product-action {
         display: inline-flex;
@@ -195,14 +210,20 @@
 
       @media (prefers-reduced-motion: reduce) {
         .product, .product img { transition: none; }
-        .product:hover img { transform: none; }
+        a.product:hover img { transform: none; }
       }
     </style>
   </head>
   <body>
     <header class="site-header">
       <div class="shell topbar">
-        <div class="brand"><span>智身科技</span><strong>开发者文档</strong></div>
+        <div class="brand">
+          <div class="brand-logos">
+            <img src="./assets/genisomai-logo.png" alt="GenisomAI" width="480" height="136">
+            <img src="./assets/eai-logo.png" alt="EAI Academy" width="240" height="145">
+          </div>
+          <strong>开发者文档</strong>
+        </div>
         <nav aria-label="产品文档">
           <a href="./l1/">L1 文档</a>
           <a href="./m1/">M1 文档</a>
@@ -212,7 +233,7 @@
     <main class="shell">
       <section class="hero" aria-labelledby="page-title">
         <div class="hero-copy">
-          <h1 id="page-title">智身产品开发文档</h1>
+          <h1 id="page-title">产品开发文档</h1>
           <p>查看智身钢镚L1 和智身钢镚M1 的设备使用指南、SDK 开发流程与接口参考。</p>
         </div>
         <img src="./assets/family.jpg" width="1800" height="1012" alt="智身科技机器人产品全家福" fetchpriority="high">
@@ -240,6 +261,15 @@
               <span class="product-action" id="m1-action">查看文档 <span aria-hidden="true">→</span></span>
             </div>
           </a>
+          <article class="product product-l2" aria-labelledby="l2-title">
+            <div class="product-image">
+              <img src="./assets/l2.png" width="800" height="699" alt="" loading="lazy" decoding="async">
+            </div>
+            <div class="product-copy">
+              <h3 id="l2-title">智身钢镚L2SDK 开发文档</h3>
+              <p><span lang="en">Coming soon</span> 即将推出</p>
+            </div>
+          </article>
         </div>
       </section>
     </main>
