@@ -2,6 +2,13 @@
   --vp-nav-height: 72px;
 }
 
+@media (min-width: 960px) {
+  /* Keep scrolling sidebar text below the fixed logo and title. */
+  .VPSidebar .curtain {
+    top: 0;
+  }
+}
+
 .VPNavBarTitle .title {
   display: grid;
   grid-template-columns: max-content;
