@@ -30,18 +30,18 @@
 | 钢镚L1 外观模型 | 用于外观尺寸查看、上装布局和空间配合参考 | <a href="../assets/downloads/zsl-1-exterior-model.stp" download>下载 STP 模型</a> |
 | 钢镚L1 URDF 模型 | 用于查看机器人连杆、关节及碰撞几何 | <a href="../assets/downloads/zsl-1-urdf.rar" download>下载 URDF</a> |
 
-#### L1-W
+#### 钢镚L1-W
 
 | 资料 | 用途 | 下载 |
 | --- | --- | --- |
-| L1-W 外观模型 | 用于查看外观尺寸和规划上装布局，解压 ZIP 后获得 STP 文件 | <a href="../assets/downloads/l1-w-exterior-model.zip" download>下载 STP 模型</a> |
-| L1-W URDF 模型 | 用于查看连杆、关节和网格，主模型为 `xg_wheel_su/urdf/xg_wheel_su.urdf` | <a href="../assets/downloads/l1-w-urdf.rar" download>下载 URDF</a> |
+| L1-W 外观模型 | 用于外观尺寸查看、上装布局和空间配合参考 | <a href="../assets/downloads/l1-w-exterior-model.zip" download>下载 STP 模型</a> |
+| L1-W URDF 模型 | 用于查看机器人连杆、关节及碰撞几何 | <a href="../assets/downloads/l1-w-urdf.rar" download>下载 URDF</a> |
 
-#### L1 EDU
+#### 钢镚L1 EDU
 
 | 资料 | 用途 | 下载 |
 | --- | --- | --- |
-| L1 EDU 外观模型 | 用于查看外观尺寸和规划上装布局 | <a href="../assets/downloads/l1-edu-exterior-model.step" download>下载 STEP 模型</a> |
+| L1 EDU 外观模型 | 用于外观尺寸查看、上装布局和空间配合参考 | <a href="../assets/downloads/l1-edu-exterior-model.step" download>下载 STEP 模型</a> |
 
 ## SDK 与控制权
 
