@@ -1,6 +1,6 @@
 # M1 SDK 控制流程与任务机制
 
-[返回文档总览](../index.md) | [M1 SDK 快速开始](./04-M1SDK快速开始.md) | [M1 SDK 接口参考](./06-M1SDK接口参考.md) | [回调、数据类型与状态参考](./07-M1回调数据类型与状态参考.md)
+[返回文档总览](../index.md) | [M1 SDK 快速开始](./04-sdk-quickstart.md) | [M1 SDK 接口参考](./06-sdk-api-reference.md) | [回调、数据类型与状态参考](./07-callbacks-data-types-and-status-reference.md)
 
 ## 应用运行流程
 
@@ -97,7 +97,7 @@ if (ec) {
 7. 失去控制权后立即停止普通控制命令。
 8. 退出前调用 `ReleaseControl()`，再断开连接。
 
-函数原型见 [M1 SDK 接口参考](./06-M1SDK接口参考.md#控制权)，事件和应答结构见 [M1 回调、数据类型与状态参考](./07-M1回调数据类型与状态参考.md#控制权事件)。
+函数原型见 [M1 SDK 接口参考](./06-sdk-api-reference.md#控制权)，事件和应答结构见 [M1 回调、数据类型与状态参考](./07-callbacks-data-types-and-status-reference.md#控制权事件)。
 
 ## 充电与离桩任务
 
@@ -134,7 +134,7 @@ void OnTaskStateData(const TaskStateInfo& info) override {
 
 需要中途停止离桩任务时调用 `StopUnDockTask()`，并等待 `TaskType::UNDOCK` 的状态变为 `STOPPED`。
 
-接口原型见 [M1 SDK 接口参考](./06-M1SDK接口参考.md#任务和机器状态)，任务状态结构见 [M1 回调、数据类型与状态参考](./07-M1回调数据类型与状态参考.md#任务状态)。
+接口原型见 [M1 SDK 接口参考](./06-sdk-api-reference.md#任务和机器状态)，任务状态结构见 [M1 回调、数据类型与状态参考](./07-callbacks-data-types-and-status-reference.md#任务状态)。
 
 ## 远程和空闲状态切换
 

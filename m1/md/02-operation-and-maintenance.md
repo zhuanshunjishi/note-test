@@ -1,6 +1,6 @@
 # M1 设备使用与维护
 
-[返回文档总览](../index.md) | [产品介绍与规格](./01-M1产品介绍与规格.md) | [系统组成与硬件接口](./03-M1系统组成与硬件接口.md)
+[返回文档总览](../index.md) | [产品介绍与规格](./01-product-introduction-and-specifications.md) | [系统组成与硬件接口](./03-system-components-and-hardware-interfaces.md)
 
 ## 使用前准备
 

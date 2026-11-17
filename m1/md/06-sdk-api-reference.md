@@ -1,10 +1,10 @@
 # M1 SDK 接口参考
 
-[返回文档总览](../index.md) | [SDK 控制流程与任务机制](./05-M1SDK控制流程与任务机制.md) | [回调、数据类型与状态参考](./07-M1回调数据类型与状态参考.md) | [示例程序与故障排查](./08-M1示例程序与故障排查.md)
+[返回文档总览](../index.md) | [SDK 控制流程与任务机制](./05-sdk-control-flow-and-task-handling.md) | [回调、数据类型与状态参考](./07-callbacks-data-types-and-status-reference.md) | [示例程序与故障排查](./08-examples-and-troubleshooting.md)
 
 ## 接口概览
 
-M1 SDK 的核心类是 `robot_sdk::SDKClient`，头文件为 `robot_sdk/sdk_client.hpp`。接口返回值统一为 `std::error_code`，控制命令的发送结果和机器人业务结果需要分别判断。连接、控制权和任务状态之间的关系见 [M1 SDK 控制流程与任务机制](./05-M1SDK控制流程与任务机制.md)。
+M1 SDK 的核心类是 `robot_sdk::SDKClient`，头文件为 `robot_sdk/sdk_client.hpp`。接口返回值统一为 `std::error_code`，控制命令的发送结果和机器人业务结果需要分别判断。连接、控制权和任务状态之间的关系见 [M1 SDK 控制流程与任务机制](./05-sdk-control-flow-and-task-handling.md)。
 
 接口调用分为以下几类：
 
@@ -323,7 +323,7 @@ std::error_code ReleaseControl(
 
 主动释放控制权。程序退出或不再控制机器人时建议调用。
 
-控制权的申请、接管和恢复流程见 [M1 SDK 控制流程与任务机制](./05-M1SDK控制流程与任务机制.md#控制权机制)。
+控制权的申请、接管和恢复流程见 [M1 SDK 控制流程与任务机制](./05-sdk-control-flow-and-task-handling.md#控制权机制)。
 
 ## 相机码率
 
@@ -371,7 +371,7 @@ std::error_code SwitchIdleState(int timeout_ms = 0, WriteHandler handler = ...);
 
 命令发送结果由返回值或 `WriteHandler` 获取；命令应答由 `IControlCallback` 获取；任务执行过程和最终状态由 `OnTaskStateData()` 获取。不要把“命令已发送”当作“任务已完成”。
 
-充电、离桩和状态切换的完整处理流程见 [M1 SDK 控制流程与任务机制](./05-M1SDK控制流程与任务机制.md#充电与离桩任务)。
+充电、离桩和状态切换的完整处理流程见 [M1 SDK 控制流程与任务机制](./05-sdk-control-flow-and-task-handling.md#充电与离桩任务)。
 
 ## 外设电源
 
@@ -472,8 +472,8 @@ if (!ec) {
 
 ## M1 机型判断
 
-SDK 会在握手时返回 `DeviceType`。启动后应先调用 `GetDeviceInfo()`，再根据返回型号启用功能。M1 相关枚举值见 [M1 回调、数据类型与状态参考](./07-M1回调数据类型与状态参考.md#deviceinfo-和-devicetype)。
+SDK 会在握手时返回 `DeviceType`。启动后应先调用 `GetDeviceInfo()`，再根据返回型号启用功能。M1 相关枚举值见 [M1 回调、数据类型与状态参考](./07-callbacks-data-types-and-status-reference.md#deviceinfo-和-devicetype)。
 
 调用当前型号不支持的操作时，SDK 返回 `Errc::UnsupportedDeviceOperation`，不会发送协议命令。
 
-完整的接口组合方式见 [M1 示例程序与故障排查](./08-M1示例程序与故障排查.md)。
+完整的接口组合方式见 [M1 示例程序与故障排查](./08-examples-and-troubleshooting.md)。
