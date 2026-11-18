@@ -8,6 +8,7 @@
 
 | 文件 | 主要内容 |
 | --- | --- |
+| `quick_start.cpp` | 只读检查连接、版本和首帧机器人状态 |
 | `data.cpp` | 连接机器人并读取数据 |
 | `control.cpp` | 综合控制、状态读取、补光灯、停障和急停 |
 | `async.cpp` | 异步连接、异步命令和回调 |
@@ -18,6 +19,7 @@
 | `camera_bitrate.cpp` | 设置前后相机码率 |
 | `recharge.cpp` | 回充和离桩任务 |
 | `led.cpp` | LED 自动模式、手动模式和灯效 |
+| `dock_pairing.cpp` | 扫描、选择、连接、查询和断开充电桩 |
 
 ## 运行约定
 
@@ -29,7 +31,11 @@
 <程序名> <机器人 IP> <端口>
 ```
 
-按 `Ctrl+C` 退出示例。程序退出前应先停止运动，再断开 SDK 连接。
+交互示例可按 `h` 查看按键，按 `q` 退出。程序退出前应先停止运动，再断开 SDK 连接。
+
+## 首次连接示例
+
+`quick_start.cpp` 连接机器人后输出版本与设备信息，等待首帧机器人状态，然后断开并退出。运行方法见[快速开始](./04-sdk-quickstart.md#编译官方示例)。
 
 ## data.cpp：读取状态
 
@@ -38,7 +44,7 @@
 检查内容：
 
 1. 异步 `Connect()` 是否完成，`GetConnectionState()` 是否进入 `CONNECTED`。
-2. `OnRobotStateData()` 和 `OnFaultData()` 是否收到状态与故障数据。
+2. `OnRobotStateData()` 是否收到状态。收到 `OnFaultData()` 后检查故障码、级别和消息，空列表表示当前上报的故障已清除。
 3. IMU、光强、运动数据、速度和关节状态能否依次开启、接收并关闭。
 4. 对应的配置应答回调是否返回设备实际采用的配置。
 
@@ -48,8 +54,8 @@
 
 `control.cpp` 集中展示机器人控制功能，包含：
 
-- 站立、卧倒、锁定和姿态切换；
-- `Move()`、`Turn()`、`ControlHead()` 和 `HighLowStance()`；
+- 站立、行走姿态、卧倒、锁定和其他姿态切换，`z` 对应 `StandUp()`，`Z` 对应 `Walk()`；
+- `Move()`、`MoveVelocity()`、`Turn()`、`ControlHead()` 和 `HighLowStance()`；
 - 速度档位切换；
 - 前后补光灯和自动补光模式；
 - 停障开关；
@@ -117,6 +123,16 @@
 
 该示例演示切换 LED 自动/手动模式、设置灯效和查询当前模式。接口和参数见 [M1 SDK 接口参考](./06-sdk-api-reference.md#led-灯效)。
 
+## 充电桩配对示例
+
+在 `example/build/` 下运行，按现场网络替换机器人地址。可选的第三个参数用于指定充电桩地址。
+
+```bash
+./dock_pairing 192.168.234.1 8082
+```
+
+按 `1` 开始扫描，扫描结果到达后按 `3` 查看、按 `4` 选择设备，再按 `2` 停止扫描。确认已停止扫描后按 `5` 连接，等待最终结果后按 `6` 查询状态。需要断开时按 `7`，按 `q` 退出。参见[充电桩配对流程](./05-sdk-control-flow-and-task-handling.md#充电桩配对)。
+
 ## 常见问题
 
 ### Connect 返回失败
@@ -129,6 +145,8 @@
 4. 检查机器人是否已经开机完成。
 5. 检查 SDK 使用的架构库是否正确。
 6. 查看 `std::error_code::message()` 和构造时的 `ErrorHandler` 输出。
+
+SDK v0.2.3 修复了首次连接失败后卡在 `CONNECTING` 或 `HANDSHAKING` 的问题。收到失败结果并排除原因后，可在同一个 `SDKClient` 实例上重试。该版本也修复了 UDP 握手期间因暂时性套接字错误，或先收到非握手报文而停止接收的问题。
 
 ### ping 成功但 SDK 未连接
 
@@ -176,6 +194,10 @@ ARM64 设备应使用 `lib/aarch64`。也可以在 CMake 中设置 `BUILD_RPATH`
 
 函数返回值或 `WriteHandler` 用于判断本次调用结果，控制应答回调用于判断机器人是否确认命令；两者都不代表动作或任务已经完成。姿态完成情况查看 `RobotState::motion_status`，任务状态查看 `OnTaskStateData()` 和 `TaskStateInfo`。
 
+### 回充或离桩任务失败
+
+在 `OnTaskStateData()` 中记录 `task_type`、`task_status`、`phase` 和 `error_code`。收到 `FAILURE` 后，按任务类型查询[回充与离桩业务错误码](./07-callbacks-data-types-and-status-reference.md#回充与离桩业务错误码)。现场排查可参考[回充、离桩与充电桩标定的使用条件和故障排查](https://github.com/zsibot/genisom_robot_sdk/blob/main/docs/zh/sdk_recharge_undock_calibration_conditions_zh.md)。
+
 ### 视频没有画面
 
 检查相机镜头和保护膜、RTSP 端口 `8554` / `8555`、网络带宽和相机码率。相机码率设置结果以 `OnUpdateCameraBitrateAck()` 返回值为准。
@@ -192,3 +214,19 @@ ARM64 设备应使用 `lib/aarch64`。也可以在 CMake 中设置 `BUILD_RPATH`
 6. 销毁回调对象和 `SDKClient`。
 
 收到 `SIGINT` 或 `SIGTERM` 后，不要直接结束进程，应先执行安全停止和连接清理。
+
+## 问题反馈模板
+
+提交问题时，可复制以下模板并填写。版本和设备信息可用 `Version()`、`ProtocolVersion()`、`SystemVersion()` 和 `GetDeviceInfo()` 获取。
+
+```text
+M1 机型与序列号：
+机器人系统版本：
+SDK 版本与协议版本：
+开发主机系统与架构：
+连接方式（WiFi / 有线、UDP / WebSocket、目标 IP 和端口）：
+最小复现步骤或调用顺序：
+预期结果：
+实际结果与完整错误日志（错误类别、码值、消息）：
+相关回调和状态（适用时填写）：
+```

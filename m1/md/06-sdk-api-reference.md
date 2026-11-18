@@ -13,12 +13,13 @@ M1 SDK 的核心类是 `robot_sdk::SDKClient`，头文件为 `robot_sdk/sdk_clie
 | 连接管理 | `Connect()`、`Disconnect()`、`IsConnected()`、`GetConnectionState()` |
 | 回调设置 | `SetControlCallback()`、`SetDataCallback()` |
 | 安全控制 | `SoftEmergencyStop()` |
-| 姿态控制 | `StandUp()`、`BalanceStandUp()`、`LieDown()`、`Stair()`、`Crawl()`、`CrawlWalk()`、`Climb()`、`Slim()`、`Gait()`、`DSB()`、`PosControl()`、`SkWalk()`、`Sand()`、`ReverseHeadTail()`、`Locked()` |
-| 运动控制 | `Move()`、`PosMove()`、`Turn()`、`ControlHead()`、`HighLowStance()`、`SetSpeed()` |
+| 姿态控制 | `StandUp()`、`Walk()`、`BalanceStandUp()`、`LieDown()`、`Stair()`、`Crawl()`、`CrawlWalk()`、`Climb()`、`Slim()`、`Gait()`、`PosControl()`、`SkWalk()`、`Sand()`、`ReverseHeadTail()`、`Locked()` |
+| 运动控制 | `Move()`、`MoveVelocity()`、`PosMove()`、`Turn()`、`ControlHead()`、`HighLowStance()`、`SetSpeed()` |
 | 灯光与感知 | `FrontLight()`、`BackLight()`、`AutoModeLight()`、`ObstacleAvoidance()` |
 | 数据上报配置 | `SetImuConfig()`、`SetLuxConfig()`、`SetMcConfig()`、`SetSpeedReportConfig()`、`SetJointStateConfig()` |
 | 控制权 | `TakeControl()`、`ReleaseControl()` |
 | 相机 | `UpdateCameraBitrate()` |
+| 充电桩配对 | `SetDockScanConfig()`、`ConnectDock()`、`GetDockInfo()`、`DisconnectDock()` |
 | 任务与状态 | `StartRechargeTask()`、`StopRechargeTask()`、`StartUnDockTask()`、`StopUnDockTask()`、`SwitchRemoteState()`、`SwitchIdleState()` |
 | 外设电源 | `SetPeriphPower()`、`GetPeriphPower()` |
 | LED | `SetLedAutoMode()`、`GetLedAutoMode()`、`SetLedCommand()` |
@@ -58,7 +59,25 @@ using WriteHandler =
 | `std::errc::invalid_argument` | — | 参数越界或参数组合无效 |
 | `std::errc::not_connected` | — | 尚未建立连接 |
 | `std::errc::timed_out` | — | 等待超时 |
+| `std::errc::operation_canceled` | — | 操作已取消 |
 | `std::errc::operation_in_progress` | — | 相同操作正在进行 |
+
+### 判断与记录 SDK 错误
+
+应用可直接与 `robot_sdk::Errc` 枚举比较。`Errc::UnsupportedDeviceOperation` 也可用标准错误条件 `std::errc::operation_not_supported` 判断。
+
+```cpp
+// ec 为 SDK 接口返回的 std::error_code。
+if (ec) {
+    std::cerr << ec.category().name() << " [" << ec.value()
+              << "] " << ec.message() << '\n';
+    if (ec == robot_sdk::Errc::UnsupportedDeviceOperation) {
+        // 按当前机型禁用相应功能。
+    }
+}
+```
+
+SDK 专用错误的类别名为 `Robot`。回充与离桩失败时，查询[任务业务错误码](./07-callbacks-data-types-and-status-reference.md#回充与离桩业务错误码)。扩展说明见[官方 SDK 错误码文档](https://github.com/zsibot/genisom_robot_sdk/blob/main/docs/zh/sdk_error_zh.md)。
 
 ## 构造与连接
 
@@ -90,6 +109,8 @@ std::error_code Connect(
 ```
 
 建立传输连接并完成协议握手。只有握手成功后才算连接成功。
+
+从 SDK v0.2.3 起，首次连接因传输、握手、协议不匹配或控制被拒绝而失败后，可在同一个 `SDKClient` 实例上再次调用 `Connect()`。异步连接应等待本次失败结果再由应用线程发起重试。
 
 | 参数 | 说明 |
 | --- | --- |
@@ -162,6 +183,7 @@ std::error_code SoftEmergencyStop(
 | 函数 | 原型 | 功能 |
 | --- | --- | --- |
 | `StandUp` | `std::error_code StandUp(int timeout_ms = 0, WriteHandler handler = ...)` | 站立 |
+| `Walk` | `std::error_code Walk(int timeout_ms = 0, WriteHandler handler = ...)` | 切换到可移动的行走姿态 |
 | `BalanceStandUp` | `std::error_code BalanceStandUp(int timeout_ms = 0, WriteHandler handler = ...)` | 平衡站立 |
 | `LieDown` | `std::error_code LieDown(int timeout_ms = 0, WriteHandler handler = ...)` | 卧倒 |
 | `Stair` | `std::error_code Stair(int timeout_ms = 0, WriteHandler handler = ...)` | 登阶姿态 |
@@ -170,7 +192,6 @@ std::error_code SoftEmergencyStop(
 | `Climb` | `std::error_code Climb(int timeout_ms = 0, WriteHandler handler = ...)` | 爬高台 |
 | `Gait` | `std::error_code Gait(int timeout_ms = 0, WriteHandler handler = ...)` | 精细步态 |
 | `Slim` | `std::error_code Slim(int timeout_ms = 0, WriteHandler handler = ...)` | 瘦身过窄道 |
-| `DSB` | `std::error_code DSB(int timeout_ms = 0, WriteHandler handler = ...)` | 通过挡鼠板 |
 | `PosControl` | `std::error_code PosControl(int timeout_ms = 0, WriteHandler handler = ...)` | 切换到位控姿态 |
 | `SkWalk` | `std::error_code SkWalk(int timeout_ms = 0, WriteHandler handler = ...)` | 同膝行走 |
 | `Sand` | `std::error_code Sand(int timeout_ms = 0, WriteHandler handler = ...)` | 沙地姿态 |
@@ -180,6 +201,8 @@ std::error_code SoftEmergencyStop(
 ![M1 SDK 运动状态](../assets/sdk/SDK-Motion-States_zh.svg)
 
 站立完成后，`RobotState::motion_status` 通常变为 `MOTION_STATUS_WALK`，表示机器人已经站好并可以移动。`Locked()` 会保持当前关节位置，下发其他姿态命令会解除锁定。
+
+`Walk()` 自 v0.2.3 提供。收到 `IControlCallback::OnWalk()` 后，通过 `RobotState::motion_status` 确认姿态是否已切换到 `MOTION_STATUS_WALK`。
 
 `ReverseHeadTail()` 不支持 `DeviceType::M1_AIR` 和 `DeviceType::M1F_AIR`。在这两种机型上调用时，SDK 返回 `Errc::UnsupportedDeviceOperation`，不会发送协议命令。
 
@@ -203,6 +226,18 @@ std::error_code Move(
 | `yaw` | `[-1.0, 1.0]` | 旋转比例，正数左转，负数右转 |
 
 实际速度由 `SetSpeed()` 当前速度档位决定。机器人侧通常只维持最新一条 `Move()` 指令约 1 s，连续运动建议以 10 至 20 Hz 周期发送。
+
+### MoveVelocity
+
+```cpp
+std::error_code MoveVelocity(
+    float x, float y, float yaw, int timeout_ms = 0,
+    WriteHandler handler = [](const std::error_code&, std::size_t) {});
+```
+
+按物理单位发送机体坐标系下的速度。`x` 为前后速度，正向朝前，`y` 为横向速度，正向朝左，两者单位均为 m/s。`yaw` 为绕竖直轴的角速度，单位为 rad/s，正向遵循右手定则。
+
+速度受当前 `SetSpeed()` 档位约束，连续运动建议以 10 至 20 Hz 周期发送。参数为 NaN 或无穷值时返回 `std::errc::invalid_argument`。发送结果可通过 `WriteHandler` 检查，该接口无专用控制应答。
 
 ### PosMove
 
@@ -349,6 +384,19 @@ struct CameraBitrateCmd {
 
 设备实际生效值通过 `OnUpdateCameraBitrateAck()` 返回。修改码率后应同时观察 RTSP 视频流和网络负载。
 
+## 充电桩配对
+
+以下接口自 SDK v0.2.3 提供，`timeout_ms` 和 `handler` 遵循[通用参数规则](#通用参数和返回值)。
+
+| 函数原型 | 协议类型 | 应答与结果 |
+| --- | --- | --- |
+| `std::error_code SetDockScanConfig(bool on, int timeout_ms = 0, WriteHandler handler = ...)` | 1008（`target=302`） | `OnDockScanConfig()` 确认开启或停止扫描，`OnDockScanResult()` 上报发现的设备（1018） |
+| `std::error_code ConnectDock(const DockConnectConfig& config, int timeout_ms = 0, WriteHandler handler = ...)` | 1022 | 通过 `config.address` 指定充电桩。检查 `OnDockConnectionAck()` 的受理结果和 `OnDockConnectionResult()` 的最终结果（1024） |
+| `std::error_code GetDockInfo(int timeout_ms = 0, WriteHandler handler = ...)` | 1023 | `OnDockInfo()` 返回充电桩信息以及连接、接触和充电状态 |
+| `std::error_code DisconnectDock(int timeout_ms = 0, WriteHandler handler = ...)` | 1022 | 断开当前充电桩，使用与连接操作相同的应答和结果回调 |
+
+调用顺序见[充电桩配对流程](./05-sdk-control-flow-and-task-handling.md#充电桩配对)，字段说明见[充电桩数据](./07-callbacks-data-types-and-status-reference.md#充电桩数据)。
+
 ## 任务和机器状态
 
 ```cpp
@@ -441,6 +489,15 @@ client.SetLedCommand(cmd);
 
 状态 LED 与前后补光灯不是同一组接口。前后补光灯使用 `FrontLight()`、`BackLight()` 和 `AutoModeLight()`。
 
+### 自动与手动模式
+
+| 模式 | 行为与调用顺序 |
+| --- | --- |
+| 手动 | 调用 `SetLedAutoMode(false)`，等 `OnSetLedAutoMode()` 确认 `auto_mode == false` 后，再用 `SetLedCommand()` 设置自定义灯效。 |
+| 自动 | 调用 `SetLedAutoMode(true)`，等应答确认 `auto_mode == true`。此时 `SetLedCommand()` 提交的是用户灯效事件，设备会按自身策略决定展示效果。故障、急停、告警或低电量提示可能覆盖用户灯效。 |
+
+当前模式可通过 `GetLedAutoMode()` 查询，并在 `OnGetLedAutoMode()` 中读取。现场联调时请观察设备实际显示的灯效。[官方 LED 指南](https://github.com/zsibot/genisom_robot_sdk/blob/main/docs/en/sdk_led_control_en.md)
+
 ## 版本和设备信息
 
 | 函数 | 原型 | 说明 |
@@ -475,5 +532,12 @@ if (!ec) {
 SDK 会在握手时返回 `DeviceType`。启动后应先调用 `GetDeviceInfo()`，再根据返回型号启用功能。M1 相关枚举值见 [M1 回调、数据类型与状态参考](./07-callbacks-data-types-and-status-reference.md#deviceinfo-和-devicetype)。
 
 调用当前型号不支持的操作时，SDK 返回 `Errc::UnsupportedDeviceOperation`，不会发送协议命令。
+
+| API | M1 Air、M1F Air | 其他 M1 机型 |
+| --- | --- | --- |
+| `ReverseHeadTail()` | 不支持 | 支持 |
+| `BackLight()` | 不支持 | 支持 |
+
+回充、离桩、外设电源和状态 LED 还取决于设备硬件与系统配置。完整的接口支持范围见[官方机型能力矩阵](https://github.com/zsibot/genisom_robot_sdk/blob/main/docs/en/sdk_api_capability_en.md)。
 
 完整的接口组合方式见 [M1 示例程序与故障排查](./08-examples-and-troubleshooting.md)。

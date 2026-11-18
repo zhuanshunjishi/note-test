@@ -36,6 +36,20 @@ genisom_robot_sdk-main/
 | `lib/aarch64/librobot_sdk.so*` | ARM64 Linux 动态库及其版本文件 |
 | `example/` | 可编译运行的示例 |
 
+## M1 系统与 SDK 版本兼容性
+
+先确认机器人系统版本，再按下表选择 SDK。完整说明以[官方兼容表](https://github.com/zsibot/genisom_robot_sdk/blob/main/README_zh.md#sdk-与机器人系统版本兼容性)为准。
+
+| M1 系统版本 | 推荐 SDK |
+| --- | --- |
+| `v0.0.5` ～ `v0.1.0-B` | `v0.0.3` |
+| `v0.1.0-C` ～ `v0.2.4` | `v0.1.1` |
+| `v0.3.0` | `v0.2.0` |
+| `v0.3.1` ～ `v0.3.3` | `v0.2.2` |
+| `v0.3.4` | `v0.2.3` |
+
+M1 系统 `v0.3.0` 搭配 SDK `v0.2.1` 时，基础控制和状态读取可用，`UpdateCameraBitrate()` 的协议定义不兼容。使用相机码率接口时，可按上表改用 SDK `v0.2.0`，或将 M1 系统升级至 `v0.3.1` 后选择兼容 SDK。
+
 ## 开发机选择
 
 SDK 需要 Linux 环境编译。可以使用：
@@ -77,19 +91,19 @@ cmake ..
 make -j6
 ```
 
-编译完成后先运行 `data`，确认网络、握手和状态上报正常：
+编译完成后先运行只读示例 `quick_start`，确认连接、握手和首帧机器人状态正常：
 
 ```bash
-./data 192.168.234.1 8082
+./quick_start 192.168.234.1 8082
 ```
 
 运行有线连接：
 
 ```bash
-./data 192.168.168.168 8082
+./quick_start 192.168.168.168 8082
 ```
 
-其他示例的用途和运行要点见 [M1 示例程序与故障排查](./08-examples-and-troubleshooting.md)。
+正常运行时会显示 `[OK] Connected`、`[OK] First robot state received` 和 `[OK] Disconnected cleanly`。旧版 SDK 包如未提供 `quick_start`，可运行该版本附带的 `data`。需要验证各传感器和上报配置时也可使用 `data`，见 [M1 示例程序与故障排查](./08-examples-and-troubleshooting.md)。
 
 ## 第一个连接程序
 
@@ -135,21 +149,30 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Threads REQUIRED)
 
-set(SDK_ROOT "/path/to/genisom_robot_sdk-main")
+set(SDK_ROOT "/path/to/genisom_robot_sdk-main" CACHE PATH "Robot SDK root")
+set(SDK_LIB_DIR "${SDK_ROOT}/lib/${CMAKE_SYSTEM_PROCESSOR}")
+
+add_library(robot_sdk SHARED IMPORTED)
+set_target_properties(robot_sdk PROPERTIES
+    IMPORTED_LOCATION "${SDK_LIB_DIR}/librobot_sdk.so"
+    INTERFACE_INCLUDE_DIRECTORIES "${SDK_ROOT}/include")
 
 add_executable(m1_demo main.cpp)
-target_include_directories(m1_demo PRIVATE "${SDK_ROOT}/include")
-target_link_directories(m1_demo PRIVATE "${SDK_ROOT}/lib/x86_64")
 target_link_libraries(m1_demo PRIVATE robot_sdk Threads::Threads)
 set_target_properties(m1_demo PROPERTIES
-    BUILD_RPATH "${SDK_ROOT}/lib/x86_64")
+    BUILD_RPATH "${SDK_LIB_DIR}")
 ```
 
-ARM64 设备将 `lib/x86_64` 改为 `lib/aarch64`。运行时如果系统找不到动态库，可以临时设置：
+示例按目标架构选择 `lib/x86_64` 或 `lib/aarch64`。在项目目录中配置并编译：
 
 ```bash
-export LD_LIBRARY_PATH=/path/to/genisom_robot_sdk-main/lib/x86_64:$LD_LIBRARY_PATH
+mkdir -p build
+cd build
+cmake .. -DSDK_ROOT=/path/to/genisom_robot_sdk-main
+cmake --build .
 ```
+
+部署时随程序提供对应架构的 SDK 动态库。运行时找不到库时，见[动态库排查](./08-examples-and-troubleshooting.md#程序启动时找不到-librobot-sdk-so)。
 
 ## 下一步
 

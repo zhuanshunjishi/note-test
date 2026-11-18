@@ -8,7 +8,7 @@ M1 SDK 使用两类回调：
 
 | 回调接口 | 接收内容 | 注册函数 |
 | --- | --- | --- |
-| `IDataCallback` | 传感器、机器人状态、故障、控制权事件和任务状态 | `SetDataCallback()` |
+| `IDataCallback` | 传感器、机器人状态、故障、控制权事件、任务状态和充电桩上报 | `SetDataCallback()` |
 | `IControlCallback` | 机器人对控制命令的应答 | `SetControlCallback()` |
 
 发送结果、命令应答和动作状态的关系见 [M1 SDK 控制流程与任务机制](./05-sdk-control-flow-and-task-handling.md#调用结果的三个层次)。
@@ -39,6 +39,8 @@ public:
     virtual void OnControlLost(const ControlLostInfo& info) {}
     virtual void OnControlAvailable(const ControlAvailableInfo& info) {}
     virtual void OnTaskStateData(const TaskStateInfo& info) {}
+    virtual void OnDockScanResult(const DockScanResult& result) {}
+    virtual void OnDockConnectionResult(const DockConnectionResult& result) {}
     virtual ~IDataCallback() = default;
 };
 ```
@@ -51,8 +53,10 @@ public:
 | `OnSpeedData` | 开启速度上报后按配置频率触发 | `SpeedData` |
 | `OnJointStateData` | 开启关节状态上报后触发 | `JointStateData` |
 | `OnRobotStateData` | 机器人主动上报，通常 1 Hz | `RobotState` |
-| `OnFaultData` | 出现故障时主动上报 | `FaultDatas` |
+| `OnFaultData` | 主动上报当前故障集合 | `FaultDatas` |
 | `OnTaskStateData` | 任务状态变化时主动上报 | `TaskStateInfo` |
+| `OnDockScanResult` | 扫描期间上报发现的充电桩 | `DockScanResult` |
+| `OnDockConnectionResult` | 上报充电桩连接或断开的最终结果 | `DockConnectionResult` |
 
 ### 控制权事件
 
@@ -78,7 +82,7 @@ public:
     virtual void OnClimb() {}
     virtual void OnSlim() {}
     virtual void OnGait() {}
-    virtual void OnDSB() {}
+    virtual void OnWalk() {}
     virtual void OnPosControl() {}
     virtual void OnSkWalk() {}
     virtual void OnSand() {}
@@ -94,9 +98,12 @@ public:
     virtual void OnMcConfig(bool on) {}
     virtual void OnSpeedReportConfig(bool on, uint32_t frequency) {}
     virtual void OnJointStateConfig(bool on) {}
+    virtual void OnDockScanConfig(bool on) {}
     virtual void OnTakeControlAck(const TakeControlAck& ack) {}
     virtual void OnReleaseControlAck(const ReleaseControlAck& ack) {}
     virtual void OnUpdateCameraBitrateAck(const CameraBitrateAck& ack) {}
+    virtual void OnDockConnectionAck(const DockConnectionAck& ack) {}
+    virtual void OnDockInfo(const DockInfo& info) {}
     virtual void OnSwitchRemote() {}
     virtual void OnSwitchIdle() {}
     virtual void OnStartRechargeTask() {}
@@ -116,15 +123,16 @@ public:
 
 | 分类 | 回调 | 说明 |
 | --- | --- | --- |
-| 姿态命令 | `OnStandUp()`、`OnLieDown()` 等 | 机器人已收到命令，动作完成看状态数据 |
+| 姿态命令 | `OnStandUp()`、`OnWalk()`、`OnLieDown()` 等 | 机器人已收到命令，动作完成看状态数据 |
 | 速度和灯光 | `OnSpeed()`、`OnFrontLight()` 等 | 返回机器人确认的设置值 |
 | 数据配置 | `OnImuConfig()`、`OnMcConfig()` 等 | 返回生效的配置 |
 | 控制权 | `OnTakeControlAck()`、`OnReleaseControlAck()` | 根据 `error_code` 判断业务结果 |
 | 相机 | `OnUpdateCameraBitrateAck()` | 返回相机实际码率 |
+| 充电桩 | `OnDockScanConfig()`、`OnDockConnectionAck()`、`OnDockInfo()` | 分别返回扫描开关、连接或断开请求是否受理、充电桩信息 |
 | 状态和任务 | `OnSwitchRemote()`、`OnStartRechargeTask()` 等 | 命令确认，任务过程看 `OnTaskStateData()` |
 | 电源和 LED | `OnSetPeriphPower()`、`OnSetLedCommand()` 等 | 返回设备确认的通道或灯效 |
 
-`Move()`、`Turn()`、`ControlHead()`、`HighLowStance()` 和 `PosMove()` 没有专用控制应答回调，发送结果通过 `WriteHandler` 获取。
+`Move()`、`MoveVelocity()`、`Turn()`、`ControlHead()`、`HighLowStance()` 和 `PosMove()` 没有专用控制应答回调，发送结果通过 `WriteHandler` 获取。
 
 ## 基础类型
 
@@ -324,27 +332,38 @@ using FaultDatas = std::vector<FaultData>;
 
 ### FaultCode 和 FaultLevel
 
+从 SDK v0.2.3 起，`FaultCode` 的底层类型为 `int`，直接承载机器人上报的协议故障码。记录告警时可同时保存数字码、`FaultData::level` 和 `message`。例如，执行器过流的 `message` 为 `Actuator/OverCurrent`。`OnFaultData()` 可能一次返回多条故障，收到空列表表示当前上报的故障已清除。
+
 | `FaultCode` | 整数值 | 含义 |
 | --- | ---: | --- |
 | `Unknown` | 0 | 未知故障 |
-| `ActuatorDisabled` | 10 | 执行器禁用 |
-| `ActuatorEncoderError` | 11 | 执行器编码器错误 |
-| `ActuatorOffline` | 12 | 执行器离线 |
-| `ActuatorOverVoltage` | 13 | 执行器过压 |
-| `ActuatorOverheat` | 14 | 执行器过热 |
-| `ActuatorTempWarn` | 15 | 执行器温度告警 |
-| `ActuatorTimeout` | 16 | 执行器控制超时 |
-| `ActuatorUndervolt` | 17 | 执行器欠压 |
-| `PowerControlOverTemp` | 18 | 电池过热告警 |
-| `PowerControlPowerEmpty` | 19 | 电池电量低于 10% |
-| `PowerControlPowerLow` | 20 | 电池电量低于 20% 且高于 10% |
-| `PowerControlOffline` | 21 | 电源控制板 MCU 连接失败 |
-| `CANBroken` | 22 | CAN 通信错误 |
-| `RobotRemoteKeepAliveFailure` | 23 | 遥控连接断开 |
-| `SystemClockSanityError` | 24 | 系统时间跳变 |
-| `SystemRobotStatusError` | 25 | 机器人状态异常 |
-| `IMUConnectError` | 26 | IMU 连接错误 |
-| `IMUDataNotUpdated` | 27 | IMU 数据未更新 |
+| `SystemClockSanityError` | 1001 | 系统时间跳变 |
+| `SystemKeyNodeLifecycleError` | 1002 | 关键节点不可达或生命周期状态异常 |
+| `SystemOptNodeLifecycleError` | 1003 | 可选节点不可达或生命周期状态异常 |
+| `MotionStateFallError` | 1004 | 检测到机器人跌倒 |
+| `IMUConnectError` | 1101 | IMU 连接错误 |
+| `IMUDataNotUpdated` | 1102 | IMU 数据更新超时 |
+| `IMUCrcError` | 1103 | IMU 数据 CRC 校验失败 |
+| `ActuatorOffline` | 1201 | 执行器离线 |
+| `ActuatorDisabled` | 1202 | 执行器禁用 |
+| `ActuatorTimeout` | 1203 | 执行器控制超时 |
+| `ActuatorEncoderError` | 1204 | 执行器编码器错误 |
+| `ActuatorOverVoltage` | 1205 | 执行器过压 |
+| `ActuatorUndervolt` | 1206 | 执行器欠压 |
+| `ActuatorOverCurrent` | 1207 | 执行器过流 |
+| `ActuatorOverSpeed` | 1208 | 执行器超速 |
+| `ActuatorOverheat` | 1209 | 执行器过热 |
+| `ActuatorOverTempWarn` | 1210 | 驱动器检测到温度告警 |
+| `ActuatorOverTempProtect` | 1211 | 驱动器触发过温保护 |
+| `ActuatorDCOverVoltage` | 1212 | 高速运动引起直流母线过压 |
+| `PowerControlOffline` | 1301 | 电源控制板离线 |
+| `PowerControlPowerLow` | 1302 | 电池电量低于 20% 且不低于 10%，可由机器人配置关闭上报 |
+| `PowerControlPowerEmpty` | 1303 | 电池电量低于 10% |
+| `CANBroken` | 1401 | CAN 总线通信故障 |
+| `SystemMcBoard…` | 1501–1516 | 运控板 I/O、内存、CPU 使用率、温度和频率诊断 |
+| `SystemAlgBoard…` | 1517–1532 | 算力板 I/O、内存、CPU 使用率、温度和频率诊断 |
+
+板卡诊断的逐项码值、协议名称和默认级别见[官方故障码参考](https://github.com/zsibot/genisom_robot_sdk/blob/main/docs/en/sdk_type_en.md#faultcode)。
 
 | `FaultLevel` | 整数值 | 含义 |
 | --- | ---: | --- |
@@ -371,7 +390,6 @@ using FaultDatas = std::vector<FaultData>;
 | `MOTION_STATUS_STAIR` | 9 | 登阶 |
 | `MOTION_STATUS_SLIM` | 10 | 瘦身过窄道 |
 | `MOTION_STATUS_GAIT` | 11 | 精细步态 |
-| `MOTION_STATUS_DSB` | 12 | 通过挡鼠板 |
 | `MOTION_STATUS_POS_CONTROL` | 13 | 位控 |
 | `MOTION_STATUS_SK_WALK` | 14 | 同膝行走 |
 | `MOTION_STATUS_SAND` | 15 | 沙地姿态 |
@@ -437,8 +455,10 @@ struct TaskStateInfo {
 | --- | --- |
 | `task_type` | 任务类型 |
 | `task_status` | 任务状态 |
-| `phase` | 预留的任务阶段描述 |
+| `phase` | 可选的任务子阶段，可能为空 |
 | `error_code` | `0` 表示成功，非 `0` 表示失败 |
+
+回充阶段依次包括 `recharge_preparing`（准备）、`recharge_docking`（对准与入桩）、`recharge_charging`（充电）和 `recharge_completed`（充满后留桩）。离桩阶段包括 `undock_preparing`（准备）、`undock_undocking`（离桩中）和 `undock_completed`（离桩完成）。应用可用 `phase` 展示进度，并以 `task_status` 判断任务结果。
 
 | 类型 | 枚举值 | 整数值 |
 | --- | --- | ---: |
@@ -458,6 +478,73 @@ struct TaskStateInfo {
 | `TaskStatus` | `STOPPED` | 5 |
 
 任务状态变化时通过 `OnTaskStateData()` 上报。充电与离桩任务的状态判断流程见 [M1 SDK 控制流程与任务机制](./05-sdk-control-flow-and-task-handling.md#充电与离桩任务)。
+
+### 回充与离桩业务错误码
+
+收到 `task_status == TaskStatus::FAILURE` 时，按 `task_type` 查找 `TaskStateInfo::error_code`。回充（`RECHARGING`）的码值范围为 `0x11000`～`0x11FFF`，离桩（`UNDOCK`）为 `0x16000`～`0x16FFF`。排查时保留原始码值，并记录失败阶段 `phase`（如有）。接口调用返回的 `std::error_code` 见 [SDK 接口参考](./06-sdk-api-reference.md#通用参数和返回值)。
+
+| 回充错误码 | 枚举 | 含义 |
+| --- | --- | --- |
+| `0x11000` | `ARC_UNKNOWN` | 未知回充异常 |
+| `0x11001` | `ARC_CALIBRATION_FILE_INVALID` | 相机标定文件无效 |
+| `0x11002` | `ARC_LOCALIZATION_CHECK_FAILED` | 感知模块未通过检查 |
+| `0x11003` | `ARC_NAV_ALIGNMENT_CHECK_FAILED` | 对准模块未通过检查 |
+| `0x11004` | `ARC_DOCK_START_TASK_FAILED` | 保留码，当前流程不上报 |
+| `0x11005` | `ARC_STAND_UP_FAILED` | 机器人未能站起 |
+| `0x11006` | `ARC_LOCALIZATION_START_FAILED` | 无法启动感知模块 |
+| `0x11007` | `ARC_NAV_ALIGNMENT_START_FAILED` | 无法启动对准任务 |
+| `0x11008` | `ARC_NAV_ALIGNMENT_FAILED` | 入桩过程中对准失败 |
+| `0x11009` | `ARC_DOCK_CONTACT_FAILED` | 未能确认与充电桩接触 |
+| `0x1100A` | `ARC_DOCK_CHARGING_START_FAILED` | 充电桩未能开始充电 |
+| `0x1100B` | `ARC_CHARGING_STATE_LOST` | 未能继续接收充电状态 |
+| `0x1100C` | `ARC_CHARGING_DOCK_FAULT` | 充电期间桩端报故障 |
+| `0x1100D` | `ARC_CHARGING_STATE_INVALID` | 收到异常的充电状态 |
+| `0x1100E` | `ARC_CHARGING_BATTERY_STATE_LOST` | 未能继续接收电池状态 |
+| `0x1100F` | `ARC_DOCK_COMMAND_ACK_FAILED` | 充电桩命令应答失败 |
+| `0x11010` | `ARC_LOCALIZATION_RUNTIME_IMAGE_INVALID` | 感知期间收到无效图像 |
+| `0x11011` | `ARC_LOCALIZATION_RUNTIME_TARGET_TAG_TIMEOUT` | 等待目标 AprilTag 超时 |
+| `0x11012` | `ARC_LOCALIZATION_RUNTIME_TAG_POSE_FAILED` | 无法计算 AprilTag 位姿 |
+| `0x11013` | `ARC_LOCALIZATION_RUNTIME_DOCK_POSE_FAILED` | 无法计算充电桩位姿 |
+| `0x11014` | `ARC_LOCALIZATION_RUNTIME_UNKNOWN` | 感知期间发生未知错误 |
+| `0x11015` | `ARC_LOCALIZATION_RUNTIME_DUPLICATE_TARGET_TAG` | 检测到重复的目标 AprilTag |
+| `0x11016` | `ARC_NAV_ALIGNMENT_STOP_FAILED` | 重试接触时未能停止对准 |
+
+| 离桩错误码 | 枚举 | 含义 |
+| --- | --- | --- |
+| `0x16000` | `UNDOCK_UNKNOWN` | 未知离桩异常 |
+| `0x16001` | `UNDOCK_STAND_UP_FAILED` | 离桩前未能站起 |
+| `0x16002` | `UNDOCK_STOP_CHARGING_FAILED` | 无法停止充电 |
+| `0x16003` | `UNDOCK_LOCALIZATION_START_FAILED` | 无法启动离桩感知 |
+| `0x16004` | `UNDOCK_NAV_ALIGNMENT_START_FAILED` | 无法启动离桩对准任务 |
+| `0x16005` | `UNDOCK_NAV_ALIGNMENT_FAILED` | 离桩过程中对准失败 |
+| `0x16006` | `UNDOCK_CALIBRATION_FILE_INVALID` | 相机标定文件无效 |
+| `0x16007` | `UNDOCK_FILL_LIGHT_FAILED` | 无法操作补光灯 |
+| `0x16008` | `UNDOCK_LOCALIZATION_QR_NOT_DETECT` | 未检测到二维码 |
+| `0x16009` | `UNDOCK_LOCALIZATION_CHECK_FAILED` | 感知模块未通过通信检查 |
+| `0x1600A` | `UNDOCK_NAV_ALIGNMENT_CHECK_FAILED` | 对准模块未通过通信检查 |
+| `0x1600B` | `UNDOCK_LOCALIZATION_RUNTIME_IMAGE_INVALID` | 离桩感知期间收到无效图像 |
+| `0x1600C` | `UNDOCK_LOCALIZATION_RUNTIME_TAG_POSE_FAILED` | 无法计算 AprilTag 位姿 |
+| `0x1600D` | `UNDOCK_LOCALIZATION_RUNTIME_DOCK_POSE_FAILED` | 无法计算充电桩位姿 |
+| `0x1600E` | `UNDOCK_LOCALIZATION_RUNTIME_UNKNOWN` | 离桩感知期间发生未知错误 |
+| `0x1600F` | `UNDOCK_LOCALIZATION_RUNTIME_DUPLICATE_TARGET_TAG` | 检测到重复的目标 AprilTag |
+| `0x16010` | `UNDOCK_DETECT_OBSTACLE_FAILED` | 检测到障碍物，离桩失败 |
+
+见 [GitHub 业务错误码表](https://github.com/zsibot/genisom_robot_sdk/blob/main/docs/zh/sdk_recharge_errorcode_zh.md)。
+
+## 充电桩数据
+
+| 类型 | 字段 | 用途 |
+| --- | --- | --- |
+| `DockScanDevice` | `name`、`address`、`rssi`、`connectable`、`service_uuids` | 扫描到的设备名称、BLE 地址、信号强度、可连接标记和服务列表 |
+| `DockScanResult` | `code`、`accepted`、`scan_active`、`devices`、`updated_at_ms` | 扫描状态和设备列表，由 `OnDockScanResult()` 上报 |
+| `DockConnectConfig` | `address` | 目标充电桩的 BLE MAC 地址 |
+| `DockConnectionAck` | `code`、`accepted`、`error_code`、`error_message` | 连接或断开请求的受理结果，由 `OnDockConnectionAck()` 返回 |
+| `DockConnectionResult` | `code`、`success`、`error_code` | 连接或断开的最终结果，由 `OnDockConnectionResult()` 上报 |
+| `DockInfo` | `code`、`ble_address`、`name`、`dock_sn`、`dock_version`、`error_code`、`error_message` | 查询结果、充电桩标识和错误信息 |
+| `DockInfo` | `dock_connected`、`has_contact`、`charging_active` | BLE 连接、机械接触和正在充电的状态 |
+| `DockInfo` | `light_switch_status`、`fill_light_brightness`、`auto_fill_light_enabled` | 补光灯开关、亮度和自动补光状态 |
+
+`OnDockInfo()` 可在主动查询后返回，也可能在充电桩状态变化时触发。字段类型见[官方头文件](https://github.com/zsibot/genisom_robot_sdk/blob/main/include/robot_sdk/sdk_type.hpp)，调用顺序见[充电桩配对流程](./05-sdk-control-flow-and-task-handling.md#充电桩配对)。
 
 ## 外设与 LED 枚举
 
