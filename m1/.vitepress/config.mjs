@@ -32,12 +32,6 @@ export default defineConfig({
         items: [
           { text: 'M1 系统与 SDK 版本兼容性', link: '/md/sdk-version-compatibility' },
           { text: '快速开始', link: '/md/04-sdk-quickstart' },
-          {
-            text: '数据读取',
-            items: [
-              { text: '视频流读取', link: '/md/video-stream-reading' },
-            ],
-          },
           { text: '控制流程与任务机制', link: '/md/05-sdk-control-flow-and-task-handling' },
           {
             text: '接口参考',
@@ -49,6 +43,13 @@ export default defineConfig({
               { text: '数据上报', link: '/md/06-03-data-reporting' },
               { text: '充电桩与任务', link: '/md/06-04-dock-and-tasks' },
               { text: '外设与相机', link: '/md/06-05-peripherals-and-camera' },
+            ],
+          },
+          {
+            text: '数据读取',
+            collapsed: false,
+            items: [
+              { text: '视频流读取', link: '/md/video-stream-reading' },
             ],
           },
           { text: '回调、数据类型与状态参考', link: '/md/07-callbacks-data-types-and-status-reference' },
