@@ -66,8 +66,8 @@
 | <a href="#flight-case"><img src="../assets/images/accessories/flight-case.jpeg" alt="L1 系列航空箱" /></a> | [航空箱 L1 / L1-W](#flight-case) | 运输、搬运和机身防护 | L1 系列 |
 | <a href="#navigation-pro"><img src="../assets/images/accessories/navigation-pro.jpeg" alt="智航 Pro" /></a> | [智航 Pro](#navigation-pro) | 建图、定位、导航、规划、避障和回充 | L1 EDU、L1-W EDU |
 | <a href="#video-kit"><img src="../assets/images/accessories/long-range-video-kit.jpeg" alt="远距图传套装" /></a> | [远距图传套装 L1 系列](#video-kit) | 远距离高清图像传输和带屏遥控 | L1、L1-W |
-| <a href="#charging-dock"><img src="../assets/images/accessories/charging-dock.jpeg" alt="L1 系列充电桩" /></a> | [充电桩 L1 系列](#charging-dock) | 配合导航软件实现机器人自主回充 | L1 EDU、L1-W EDU |
-|  | [充电电极片](#electrode) | 机身与充电桩之间的充电接触组件 | L1 EDU、L1-W EDU |
+| <a href="#charging-dock"><img src="../assets/images/accessories/charging-dock.jpeg" alt="L1 系列充电桩" /></a> | [充电桩 L1 系列](#charging-dock) | 配合导航软件实现机器人自主回充 | L1、L1-W、L1 EDU、L1-W EDU |
+|  | [充电电极片](#electrode) | 机身与充电桩之间的充电接触组件 | L1、L1-W、L1 EDU、L1-W EDU |
 
 <style>
   .markdown-body img[alt] {
@@ -225,8 +225,8 @@
 
 | 字段 | 说明 |
 | --- | --- |
-| 主要作用 | 支持机器人自主回充 |
-| 适配机型 | L1 EDU、L1-W EDU |
+| 主要作用 | 配合导航软件实现机器人自主回充 |
+| 适配机型 | L1、L1-W、L1 EDU、L1-W EDU |
 | 主要组成 | 高亮定位二维码、折叠式固定支架、充电底座、充电状态指示 |
 | 包装箱尺寸 | 580 × 262 × 371 mm |
 | 产品毛重 | 约 12 kg，含包装箱 |
@@ -237,4 +237,4 @@
 
 充电电极片安装在机器人机身上，与充电桩触点配合完成充电。
 
-L1 EDU 和 L1-W EDU 标配电极片。
+L1 EDU 和 L1-W EDU 标配电极片。L1 和 L1-W 使用充电桩回充前，请确认机身已安装电极片。

@@ -4,10 +4,10 @@
 
 ## 视频流信息
 
-L1 本体相机通过 RTSP 提供 H.264 视频流。开发设备连接机器人网络后，可使用以下默认地址拉取画面：
+L1 本体相机通过 RTSP 提供 H.264 视频流。开发设备连接机器人网络后，可使用以下带认证信息的默认地址拉取画面。
 
 ```text
-rtsp://192.168.234.1:8554/test
+rtsp://user:Abcd%232027%21@192.168.234.1:8554/test
 ```
 
 | 项目 | 默认值 |
@@ -22,22 +22,14 @@ rtsp://192.168.234.1:8554/test
 
 ### 账号认证
 
-视频流可能需要账号认证。播放器提示输入账号和密码时，使用以下信息：
+播放器提示输入账号和密码时，填写以下默认凭据。
 
 | 项目 | 值 |
 | --- | --- |
 | 用户名 | `user` |
 | 密码 | `Abcd#2027!` |
 
-需要在 RTSP 地址中携带认证信息时，可使用以下地址：
-
-```text
-rtsp://user:Abcd%232027%21@192.168.234.1:8554/test
-```
-
-地址中的密码已进行 URL 编码，其中 `#` 编码为 `%23`，`!` 编码为 `%21`；在播放器的独立密码输入框中，应填写上表中的原始密码。
-
-下文的 FFplay、GStreamer 和 OpenCV 示例默认使用不带账号的地址。若设备要求认证，将示例中的 RTSP 地址替换为上述带认证信息的地址；在终端命令中使用时，应将整个地址用单引号括起。VLC 弹出认证窗口时，直接填写上述用户名和密码即可。
+默认地址中的密码已进行 URL 编码，其中 `#` 编码为 `%23`，`!` 编码为 `%21`。在播放器的独立密码输入框中填写上表中的原始密码。
 
 ## 使用前准备
 
@@ -74,7 +66,7 @@ ffplay -rtsp_transport tcp \
   -probesize 32 \
   -analyzeduration 0 \
   -sync ext \
-  rtsp://192.168.234.1:8554/test
+  'rtsp://user:Abcd%232027%21@192.168.234.1:8554/test'
 ```
 
 该命令使用 TCP 传输，并通过减小探测和缓冲降低显示延迟。按 `q` 退出播放。
@@ -98,7 +90,7 @@ sudo apt install -y \
 
 ```bash
 gst-launch-1.0 \
-  rtspsrc location=rtsp://192.168.234.1:8554/test latency=0 \
+  rtspsrc location='rtsp://user:Abcd%232027%21@192.168.234.1:8554/test' latency=0 \
   ! rtph264depay \
   ! h264parse \
   ! avdec_h264 \
@@ -114,7 +106,7 @@ gst-launch-1.0 \
 
 1. 打开 VLC。
 2. 选择“媒体” > “打开网络串流”。
-3. 输入 `rtsp://192.168.234.1:8554/test`。
+3. 输入本文开头的默认 RTSP 地址。
 4. 点击“播放”。
 
 VLC 的实际延迟和兼容性受版本及缓存设置影响。无法打开或延迟较大时，优先使用 FFplay 或 GStreamer 验证视频流。
@@ -137,7 +129,7 @@ import time
 import cv2
 
 
-RTSP_URL = "rtsp://192.168.234.1:8554/test"
+RTSP_URL = "rtsp://user:Abcd%232027%21@192.168.234.1:8554/test"
 
 
 def open_stream(url):
@@ -199,7 +191,7 @@ python3 -c "import cv2; print(cv2.getBuildInformation())" | grep GStreamer
 import cv2
 
 
-RTSP_URL = "rtsp://192.168.234.1:8554/test"
+RTSP_URL = "rtsp://user:Abcd%232027%21@192.168.234.1:8554/test"
 
 
 def main():
@@ -250,7 +242,7 @@ if __name__ == "__main__":
 | --- | --- |
 | `ping` 不通 | 检查是否连接机器人网络、机器人 IP 是否正确，以及本机网卡配置 |
 | `Connection refused` | 确认机器人启动完成，并在遥控器应用中打开视频流开关 |
-| `401 Unauthorized` 或提示账号认证 | 使用“账号认证”一节中的用户名和密码；通过 URL 传入密码时，使用该节提供的编码后地址 |
+| `401 Unauthorized` 或提示账号认证 | 通过 URL 连接时，检查是否使用了本文开头带认证信息的默认地址。播放器单独提示认证时，填写“账号认证”一节中的用户名和原始密码 |
 | FFplay 可以播放，OpenCV 无法打开 | 检查 OpenCV 的 FFmpeg/GStreamer 后端支持情况 |
 | GStreamer 提示缺少元素 | 安装本章列出的 GStreamer 插件包，使用 `gst-inspect-1.0` 检查缺失插件 |
 | 可以连接但没有画面 | 检查 RTSP 路径是否为 `/test`，然后重启播放器并重新切换视频流开关 |
