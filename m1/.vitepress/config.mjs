@@ -20,12 +20,6 @@ export default defineConfig({
     ],
     sidebar: [
       {
-        text: '数据读取',
-        items: [
-          { text: '1. 视频流读取', link: '/md/video-stream-reading' },
-        ],
-      },
-      {
         text: '产品与设备',
         items: [
           { text: '产品介绍与规格', link: '/md/01-product-introduction-and-specifications' },
@@ -38,6 +32,12 @@ export default defineConfig({
         items: [
           { text: 'M1 系统与 SDK 版本兼容性', link: '/md/sdk-version-compatibility' },
           { text: '快速开始', link: '/md/04-sdk-quickstart' },
+          {
+            text: '数据读取',
+            items: [
+              { text: '视频流读取', link: '/md/video-stream-reading' },
+            ],
+          },
           { text: '控制流程与任务机制', link: '/md/05-sdk-control-flow-and-task-handling' },
           {
             text: '接口参考',
