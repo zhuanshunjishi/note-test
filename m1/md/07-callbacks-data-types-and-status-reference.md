@@ -295,7 +295,9 @@ struct Speed {
 };
 ```
 
-## 电池和故障数据
+## 电池数据
+
+通过 `OnRobotStateData()` 获取 `RobotState::battery`。
 
 ```cpp
 struct BatteryData {
@@ -307,14 +309,6 @@ struct BatteryData {
     PowerSupplyStatus power_supply_status1;
     PowerSupplyStatus power_supply_status2;
 };
-
-struct FaultData {
-    FaultCode code;
-    FaultLevel level;
-    std::string message;
-};
-
-using FaultDatas = std::vector<FaultData>;
 ```
 
 字段末尾的 `1` 和 `2` 分别表示电池 1 和电池 2。电量为百分比，电压单位为 V，温度单位为 ℃，电流单位为 A。
@@ -327,6 +321,20 @@ using FaultDatas = std::vector<FaultData>;
 | `CHARGING` | 1 | 充电中 |
 | `DISCHARGING` | 2 | 放电中 |
 | `FULL` | 4 | 已充满 |
+
+## 故障数据
+
+通过 `OnFaultData()` 获取当前故障列表。
+
+```cpp
+struct FaultData {
+    FaultCode code;
+    FaultLevel level;
+    std::string message;
+};
+
+using FaultDatas = std::vector<FaultData>;
+```
 
 ### FaultCode 和 FaultLevel
 

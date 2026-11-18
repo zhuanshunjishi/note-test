@@ -20,6 +20,12 @@ export default defineConfig({
     ],
     sidebar: [
       {
+        text: '数据读取',
+        items: [
+          { text: '1. 视频流读取', link: '/md/video-stream-reading' },
+        ],
+      },
+      {
         text: '产品与设备',
         items: [
           { text: '产品介绍与规格', link: '/md/01-product-introduction-and-specifications' },
