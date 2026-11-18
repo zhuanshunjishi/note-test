@@ -6,9 +6,8 @@ import './style.css'
 
 export default {
   extends: DefaultTheme,
-  Layout(_, { slots }) {
+  Layout() {
     return h(DefaultTheme.Layout, null, {
-      ...slots,
       'nav-bar-title-before': () => h('span', { class: 'docs-brand-logos' }, [
         h('img', { src: genisomaiLogo, alt: 'GenisomAI', width: 480, height: 136 }),
         h('img', { src: eaiLogo, alt: 'EAI Academy', width: 240, height: 145 }),

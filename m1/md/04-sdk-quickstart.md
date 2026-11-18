@@ -2,6 +2,10 @@
 
 [返回文档总览](../index.md) | [系统组成、硬件接口与结构设计资料](./03-system-components-and-hardware-interfaces.md) | [SDK 控制流程与任务机制](./05-sdk-control-flow-and-task-handling.md) | [M1 SDK 接口参考](./06-sdk-api-reference.md)
 
+::: tip 开始前
+请先查阅 [M1 系统与 SDK 版本兼容性](./sdk-version-compatibility.md)，根据机器人的系统版本选择对应的 SDK。
+:::
+
 ## 开发环境
 
 主要运行环境为 Ubuntu 22.04、GCC 11.4、CMake 3.8+ 和 Boost 1.74。
@@ -35,20 +39,6 @@ genisom_robot_sdk-main/
 | `lib/x86_64/librobot_sdk.so*` | x86_64 Linux 动态库及其版本文件 |
 | `lib/aarch64/librobot_sdk.so*` | ARM64 Linux 动态库及其版本文件 |
 | `example/` | 可编译运行的示例 |
-
-## M1 系统与 SDK 版本兼容性
-
-先确认机器人系统版本，再按下表选择 SDK。完整说明以[官方兼容表](https://github.com/zsibot/genisom_robot_sdk/blob/main/README_zh.md#sdk-与机器人系统版本兼容性)为准。
-
-| M1 系统版本 | 推荐 SDK |
-| --- | --- |
-| `v0.0.5` ～ `v0.1.0-B` | `v0.0.3` |
-| `v0.1.0-C` ～ `v0.2.4` | `v0.1.1` |
-| `v0.3.0` | `v0.2.0` |
-| `v0.3.1` ～ `v0.3.3` | `v0.2.2` |
-| `v0.3.4` | `v0.2.3` |
-
-M1 系统 `v0.3.0` 搭配 SDK `v0.2.1` 时，基础控制和状态读取可用，`UpdateCameraBitrate()` 的协议定义不兼容。使用相机码率接口时，可按上表改用 SDK `v0.2.0`，或将 M1 系统升级至 `v0.3.1` 后选择兼容 SDK。
 
 ## 开发机选择
 

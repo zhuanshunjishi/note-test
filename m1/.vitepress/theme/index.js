@@ -1,12 +1,9 @@
-import { h } from 'vue'
 import SharedTheme from '../../../.vitepress/theme/index.js'
-import SdkVersionSelect from './SdkVersionSelect.vue'
+import M1DocsVersion from './M1DocsVersion.vue'
 
 export default {
   ...SharedTheme,
-  Layout() {
-    return h(SharedTheme.Layout, null, {
-      'sidebar-nav-before': () => h(SdkVersionSelect),
-    })
+  enhanceApp({ app }) {
+    app.component('M1DocsVersion', M1DocsVersion)
   },
 }

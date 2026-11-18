@@ -161,8 +161,6 @@ struct DeviceInfo {
 | `M1F_PRO` | 4 | 中狗点足 Pro |
 | `M1_ULTRA` | 5 | 中狗轮足 Ultra |
 | `M1F_ULTRA` | 6 | 中狗点足 Ultra |
-| `M1_AIR` | 7 | 中狗轮足 Air |
-| `M1F_AIR` | 8 | 中狗点足 Air |
 
 `device_type` 来自连接握手，`sn` 为机器人序列号。连接成功前或断开后，类型可能为 `UNKNOWN`，序列号可能为空。
 

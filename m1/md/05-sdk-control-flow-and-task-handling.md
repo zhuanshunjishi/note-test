@@ -97,7 +97,7 @@ if (ec) {
 7. 失去控制权后立即停止普通控制命令。
 8. 退出前调用 `ReleaseControl()`，再断开连接。
 
-函数原型见 [M1 SDK 接口参考](./06-sdk-api-reference.md#控制权)，事件和应答结构见 [M1 回调、数据类型与状态参考](./07-callbacks-data-types-and-status-reference.md#控制权事件)。
+函数原型见 [M1 SDK 接口参考](./06-02-robot-control.md#控制权)，事件和应答结构见 [M1 回调、数据类型与状态参考](./07-callbacks-data-types-and-status-reference.md#控制权事件)。
 
 ## 充电桩配对
 
@@ -112,7 +112,7 @@ SDK v0.2.3 支持扫描、连接、查询和断开 BLE 充电桩。确认机器�
 
 一次只发起一个连接或断开操作。函数返回值和 `WriteHandler` 用于检查调用与发送结果，`OnDockConnectionResult()` 用于确认配对操作的最终结果。机器人执行自主回充或离桩时，进度和结果由 `OnTaskStateData()` 上报。
 
-参见[接口原型](./06-sdk-api-reference.md#充电桩配对)、[回调与数据结构](./07-callbacks-data-types-and-status-reference.md#充电桩数据)和[配对示例](./08-examples-and-troubleshooting.md#充电桩配对示例)。
+参见[接口原型](./06-04-dock-and-tasks.md#充电桩配对)、[回调与数据结构](./07-callbacks-data-types-and-status-reference.md#充电桩数据)和[配对示例](./08-examples-and-troubleshooting.md#充电桩配对示例)。
 
 ## 充电与离桩任务
 
@@ -149,7 +149,7 @@ void OnTaskStateData(const TaskStateInfo& info) override {
 
 需要中途停止离桩任务时调用 `StopUnDockTask()`，并等待 `TaskType::UNDOCK` 的状态变为 `STOPPED`。
 
-接口原型见 [M1 SDK 接口参考](./06-sdk-api-reference.md#任务和机器状态)，任务状态结构见 [M1 回调、数据类型与状态参考](./07-callbacks-data-types-and-status-reference.md#任务状态)。
+接口原型见 [M1 SDK 接口参考](./06-04-dock-and-tasks.md#任务和机器状态)，任务状态结构见 [M1 回调、数据类型与状态参考](./07-callbacks-data-types-and-status-reference.md#任务状态)。
 
 参见[回充、离桩与充电桩标定的使用条件和故障排查](https://github.com/zsibot/genisom_robot_sdk/blob/main/docs/zh/sdk_recharge_undock_calibration_conditions_zh.md)。
 

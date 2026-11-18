@@ -80,4 +80,4 @@ SDK 构造函数默认使用 `TransportProtocol::Udp`。如果使用 WebSocket�
 
 ## 视频流
 
-M1 提供 RTSP 视频流端口 `8554` 和 `8555`。具体流地址、前后相机对应关系和码率需要结合当前设备配置确认。SDK 自身提供 `UpdateCameraBitrate()` 用于调整相机码率，接口说明见 [M1 SDK 接口参考](./06-sdk-api-reference.md)。
+M1 提供 RTSP 视频流端口 `8554` 和 `8555`。具体流地址、前后相机对应关系和码率需要结合当前设备配置确认。SDK 自身提供 `UpdateCameraBitrate()` 用于调整相机码率，接口说明见 [相机码率](./06-05-peripherals-and-camera.md#相机码率)。

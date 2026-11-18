@@ -15,11 +15,12 @@ M1 SDK 的核心类是 `robot_sdk::SDKClient`。应用程序通过 `SDKClient` �
 | [1. M1 产品介绍与规格](./md/01-product-introduction-and-specifications.md) | M1 系列各版本的外观、参数、传感器和软件能力 | 选型或初次了解产品时阅读 |
 | [2. M1 设备使用与维护](./md/02-operation-and-maintenance.md) | 使用准备、开关机、遥控器、运动模式、安全保护、换电、充电和维护 | 首次操作设备前阅读 |
 | [3. M1 系统组成、硬件接口与结构设计资料](./md/03-system-components-and-hardware-interfaces.md) | 介绍系统组成、网络通信、扩展仓和视频接口，并提供[上装空间示意图、负载设计参考、外观模型和 URDF 模型](./md/03-system-components-and-hardware-interfaces.md#payload-model-downloads)。 | 接入网络或安装上装设备前阅读 |
-| [4. M1 SDK 快速开始](./md/04-sdk-quickstart.md) | 开发环境、SDK 目录、连接、编译、运行和自定义工程 | 第一次运行 SDK 时阅读 |
-| [5. M1 SDK 控制流程与任务机制](./md/05-sdk-control-flow-and-task-handling.md) | 调用结果层级、同步与异步、控制权、充电桩配对、回充和状态切换 | 编写正式控制程序前阅读 |
-| [6. M1 SDK 接口参考](./md/06-sdk-api-reference.md) | `SDKClient` 的函数原型、参数、返回值和应答 | 编码时按功能查询 |
-| [7. M1 回调、数据类型与状态参考](./md/07-callbacks-data-types-and-status-reference.md) | 回调接口、结构体、枚举、传感器数据和机器人状态 | 处理上报数据和命令应答时查询 |
-| [8. M1 示例程序与故障排查](./md/08-examples-and-troubleshooting.md) | 官方示例用途、运行要点、常见问题和退出流程 | 联调、验证和排查问题时阅读 |
+| [4. M1 系统与 SDK 版本兼容性](./md/sdk-version-compatibility.md) | 系统版本与推荐 SDK 的对应关系 | 选择 SDK 版本前阅读 |
+| [5. M1 SDK 快速开始](./md/04-sdk-quickstart.md) | 开发环境、SDK 目录、连接、编译、运行和自定义工程 | 第一次运行 SDK 时阅读 |
+| [6. M1 SDK 控制流程与任务机制](./md/05-sdk-control-flow-and-task-handling.md) | 调用结果层级、同步与异步、控制权、充电桩配对、回充和状态切换 | 编写正式控制程序前阅读 |
+| [7. M1 SDK 接口参考](./md/06-sdk-api-reference.md) | `SDKClient` 的函数原型、参数、返回值和应答 | 编码时按功能查询 |
+| [8. M1 回调、数据类型与状态参考](./md/07-callbacks-data-types-and-status-reference.md) | 回调接口、结构体、枚举、传感器数据和机器人状态 | 处理上报数据和命令应答时查询 |
+| [9. M1 示例程序与故障排查](./md/08-examples-and-troubleshooting.md) | 官方示例用途、运行要点、常见问题和退出流程 | 联调、验证和排查问题时阅读 |
 
 ## 开发环境与通信
 

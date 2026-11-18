@@ -101,7 +101,7 @@
 
 ### auto_reconnect.cpp
 
-自动重连通过 `ConnectionConfig` 配置，字段和默认值见 [M1 SDK 接口参考](./06-sdk-api-reference.md#sdkclient)。
+自动重连通过 `ConnectionConfig` 配置，字段和默认值见 [M1 SDK 接口参考](./06-01-connection-and-device-info.md#sdkclient)。
 
 自动重连只负责恢复连接，不代表应用自动重新获得控制权。重连后仍需读取控制来源、状态和故障，并按流程重新申请控制权。
 
@@ -113,7 +113,7 @@
 
 ## camera_bitrate.cpp：相机码率
 
-该示例设置前后相机码率，并通过 `OnUpdateCameraBitrateAck()` 读取设备实际生效值。参数范围见 [M1 SDK 接口参考](./06-sdk-api-reference.md#相机码率)。
+该示例设置前后相机码率，并通过 `OnUpdateCameraBitrateAck()` 读取设备实际生效值。参数范围见 [M1 SDK 接口参考](./06-05-peripherals-and-camera.md#相机码率)。
 
 ## recharge.cpp：回充和离桩
 
@@ -121,7 +121,7 @@
 
 ## led.cpp：LED 控制
 
-该示例演示切换 LED 自动/手动模式、设置灯效和查询当前模式。接口和参数见 [M1 SDK 接口参考](./06-sdk-api-reference.md#led-灯效)。
+该示例演示切换 LED 自动/手动模式、设置灯效和查询当前模式。接口和参数见 [M1 SDK 接口参考](./06-05-peripherals-and-camera.md#led-灯效)。
 
 ## 充电桩配对示例
 
